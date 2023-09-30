@@ -1,5 +1,6 @@
 package co.edu.unicartagena;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -27,25 +28,35 @@ public class Main {
                     0. Salir
                                         
                     Opción:""");
-            var option = sc.nextInt();
-            sc.nextLine();
+            try{
+                var option = sc.nextInt();
+                sc.nextLine();
 
-            switch (option) {
-                case 0 -> System.exit(0);
+                switch (option) {
+                    case 0 -> System.exit(0);
 
-                case 1 -> sumaDeFilasYColumnas();
+                    case 1 -> sumaDeFilasYColumnas();
 
-                case 2 -> operacionesAritmeticas();
+                    case 2 -> operacionesAritmeticas();
 
-                case 3 -> ordenarElementos();
+                    case 3 -> ordenarElementos();
 
-                case 4 -> rotacionDeMatrices();
+                    case 4 -> rotacionDeMatrices();
 
-                default -> System.out.println("Opción no válida");
+                    default -> System.out.println("Opción no válida");
+                }
+
+                System.out.println("\nPresione enter para continuar...");
+                sc.nextLine();
+
+            }catch (InputMismatchException e){
+                sc.nextLine();
+
+                if (!handleInputError("La opción ingresada no es válida.",
+                        "¿Desea volver al menú principal?")){
+                    System.exit(0);
+                }
             }
-
-            System.out.println("\nPresione enter para continuar...");
-            sc.nextLine();
         } while (true);
 
     }
@@ -78,12 +89,15 @@ public class Main {
 
         // Llenar la matriz
         for (int i = 0; i < n; i++) {
-            System.out.printf("Ingrese los %d(m) datos de la fila n=%d separados por espacios: ", m, i);
+            var messageError = "¿Desea corregir la fila %d?".formatted(i);
+
+            System.out.printf("Ingrese los %d datos(m) de la fila n=%d separados por espacios: ", m, i);
             var row = sc.nextLine().split(" ");
 
             // Validar la cantidad de datos por fila
             if (row.length > m) {
-                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, m))) {
+                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, m),
+                        messageError)) {
                     --i;
                     continue;
                 } else {
@@ -91,7 +105,8 @@ public class Main {
                 }
 
             } else if (row.length < m) {
-                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, m))) {
+                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, m),
+                        messageError)) {
                     --i;
                 } else {
                     return null;
@@ -100,19 +115,22 @@ public class Main {
 
             // Validar que los datos sean números
             for (int j = 0; j < n; j++) {
+                messageError = "¿Desea corregir la fila %d?".formatted(i);
+
                 try {
                     matriz[i][j] = Integer.parseInt(row[j]);
 
                     // Validar que los datos sean enteros positivos o negativos
                     if (matriz[i][j] == 0) {
-                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n")) {
+                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n",
+                                messageError)) {
                             --i;
                         } else {
                             return null;
                         }
                     }
                 } catch (NumberFormatException ignore) {
-                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]))) {
+                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]), messageError)) {
                         --i;
                     } else {
                         return null;
@@ -130,9 +148,9 @@ public class Main {
      * @param message Mensaje a mostrar al usuario.
      * @return true si el usuario desea corregir los datos, false en caso contrario.
      */
-    private static boolean handleInputError(String message) {
-        System.out.println(message);
-        return getConfirmation("¿Desea corregir los datos erróneos?");
+    private static boolean handleInputError(String error, String message) {
+        System.out.println(error);
+        return getConfirmation(message);
     }
 
     /**
@@ -142,9 +160,9 @@ public class Main {
      * @return true si el usuario desea continuar, false en caso contrario.
      */
     private static boolean getConfirmation(String message) {
-        System.out.printf("%s (s): ", message);
+        System.out.printf("%s Si(s) - No(otro): ", message);
         var confirmation = sc.nextLine();
-        return confirmation.equalsIgnoreCase("s");
+        return confirmation.equalsIgnoreCase("s") || confirmation.equalsIgnoreCase("si");
     }
 
     /**
@@ -233,34 +251,45 @@ public class Main {
                     0. Cancelar operación.
                                     
                     Opción:""");
+            try{
+                var option = sc.nextInt();
+                sc.nextLine();
 
-            var option = sc.nextInt();
-            sc.nextLine();
-
-            switch (option) {
-                case 1 -> {
-                    matriz = new Matriz(generarMatrizAleatoria(n, m, 5, 10));
-                    System.out.println(matriz.procesarSuma());
-                    break menu;
-                }
-
-                case 2 -> {
-                    var base = obtenerDatos(n, m);
-                    if (base != null) {
-                        matriz = new Matriz(base);
+                switch (option) {
+                    case 1 -> {
+                        matriz = new Matriz(generarMatrizAleatoria(n, m, 5, 10));
                         System.out.println(matriz.procesarSuma());
                         break menu;
                     }
 
-                    return;
-                }
+                    case 2 -> {
+                        var base = obtenerDatos(n, m);
+                        if (base != null) {
+                            matriz = new Matriz(base);
+                            System.out.println(matriz.procesarSuma());
+                            break menu;
+                        }
 
-                case 0 -> {
-                    return;
-                }
+                        return;
+                    }
 
-                default -> System.out.println("\nOpción no válida.\n\n");
+                    case 0 -> {
+                        return;
+                    }
+
+                    default -> System.out.println("\nOpción no válida.\n\n");
+                }
+            } catch (InputMismatchException ignored){
+                sc.nextLine();
+
+                if (!handleInputError("Opción no válida. Las opciones se seleccionan con valores numéricos.",
+                        "¿Desea volver a seleccionar una opción?")){
+                    break;
+                } else {
+                    clearScreen();
+                }
             }
+
         } while (true);
     }
 
@@ -268,7 +297,7 @@ public class Main {
      * Método para ejecutar las operaciones aritméticas a la matriz según las especificaciones del problema.
      */
     private static void operacionesAritmeticas() {
-        //TODO: Implementar
+
     }
 
     /**
