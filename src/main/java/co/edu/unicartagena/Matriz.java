@@ -64,6 +64,26 @@ public class Matriz {
      */
     public int getDimension(){return this.matriz == null? 0 : this.matriz.length;}
 
+
+    /**
+     * Método para llenar una determinada fila de la matriz, con el formato adecuado y sus índices.
+     * @param indexSpacing Espacio que ocupará el índice de la fila.
+     * @param index Índice de la fila a llenar.
+     * @return Fila de la matriz en forma de StringBuilder.
+     */
+    private StringBuilder llenarFila(int indexSpacing, int index){
+        // Indice de la fila
+        StringBuilder filaText = new StringBuilder(String.format("%"+indexSpacing+"d ", index));
+
+        // Obtención de valores
+        for (int dato : Objects.requireNonNull(matriz)[index]) {
+            var datoText = String.format(" %"+SPACING+"s ", dato);
+
+            filaText.append(datoText);
+        }
+
+        return filaText;
+    }
     /**
      * Método para procesar la suma de filas y columna de la matriz.
      * @return Matriz procesada en forma de String con las sumas de filas y columnas.
@@ -89,19 +109,11 @@ public class Matriz {
 
         // Agregar el encabezado a la matriz
         matrizText.append(header);
-
         // Llenar el cuerpo de la matriz
-        for (int i=0; i<matriz.length; i++) {
+        for (int i = 0; i< Objects.requireNonNull(matriz).length; i++) {
 
             // Indice de la fila
-            StringBuilder filaText = new StringBuilder(String.format("%"+specialSpacing+"d ", i));
-
-            // Obtención de valores
-            for (int dato : matriz[i]) {
-                var datoText = String.format(" %"+SPACING+"s ", dato);
-
-                filaText.append(datoText);
-            }
+            StringBuilder filaText = llenarFila(specialSpacing, i);
 
             matrizText.append(filaText);
 
