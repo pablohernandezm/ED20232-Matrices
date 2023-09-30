@@ -55,68 +55,12 @@ public class Main {
      *
      * @return Matriz cuadrada de tipo entero.
      */
-    private static int[][] obtenerDatosCuadrada() {
-        System.out.print("\nIngrese la dimensión de la matriz cuadrada: ");
-        var size = sc.nextInt();
-        sc.nextLine();
-
-        // Manejar dimensiones negativas
-        if (size < 0) {
-            if (handleInputError("\nEl tamaño de la matriz no puede ser negativo.\n")) {
-                return obtenerDatosCuadrada();
-            }
-
-            return null;
+    private static int[][] obtenerDatosCuadrada(int size) throws IllegalArgumentException {
+        if (size <= 0) {
+            throw new IllegalArgumentException("El tamaño de la matriz no puede ser negativo o cero.");
         }
 
-        int[][] matriz = new int[size][size];
-
-        // Llenar la matriz
-        for (int i = 0; i < matriz.length; i++) {
-            System.out.printf("Ingrese los datos de la fila %d separados por espacios: ", i);
-            var row = sc.nextLine().split(" ");
-
-            // Validar la cantidad de datos por fila
-            if (row.length > size) {
-                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, size))) {
-                    --i;
-                    continue;
-                } else {
-                    return null;
-                }
-
-            } else if (row.length < size) {
-                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, size))) {
-                    --i;
-                } else {
-                    return null;
-                }
-            }
-
-            // Validar que los datos sean números
-            for (int j = 0; j < matriz.length; j++) {
-                try {
-                    matriz[i][j] = Integer.parseInt(row[j]);
-
-                    // Validar que los datos sean enteros positivos o negativos
-                    if (matriz[i][j] == 0) {
-                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n")) {
-                            --i;
-                        } else {
-                            return null;
-                        }
-                    }
-                } catch (NumberFormatException ignore) {
-                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]))) {
-                        --i;
-                    } else {
-                        return null;
-                    }
-                }
-            }
-        }
-
-        return matriz;
+        return obtenerDatos(size, size);
     }
 
     /**
@@ -127,6 +71,8 @@ public class Main {
      * @return Matriz de tipo entero.
      */
     private static int[][] obtenerDatos(int n, int m) {
+        if (n <= 0 || m <= 0)
+            throw new IllegalArgumentException("Las dimensiones de la matriz no pueden ser negativas o cero.");
 
         int[][] matriz = new int[n][m];
 
