@@ -1,5 +1,6 @@
 package co.edu.unicartagena;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -14,13 +15,13 @@ public class Main {
      * @param args Argumentos de la línea de comandos
      */
     public static void main(String[] args) {
-        Matriz matriz = new Matriz();
-
         do {
             System.out.print("""
                     Menu
-                    1. Llenar la matriz
-                    2. Sumas de filas y columnas
+                    1. Sumas de filas y columnas
+                    2. Operaciones aritméticas en una matriz.
+                    3. Ordenando los elementos de una matriz.
+                    4. Rotación de matrices.
                     0. Salir
                                         
                     Opción:""");
@@ -28,33 +29,15 @@ public class Main {
             sc.nextLine();
 
             switch (option) {
-                case 0 -> {
-                    System.out.println("Adios");
-                    System.exit(0);
-                }
+                case 0 -> System.exit(0);
 
-                case 1 -> {
-                    var datos = obtenerDatos();
-                    if (datos == null){
-                        continue;
-                    }
+                case 1 -> sumaDeFilasYColumnas();
 
-                    try{
-                        matriz = new Matriz(datos);
+                case 2 -> operacionesAritmeticas();
 
-                        System.out.println("\nMatriz creada con éxito");
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
+                case 3 -> ordenarElementos();
 
-                case 2 -> {
-                   try {
-                       System.out.println(matriz.procesarSuma());
-                   } catch (NullPointerException e){
-                       System.out.println(e.getMessage());
-                   }
-                }
+                case 4 -> rotacionDeMatrices();
 
                 default -> {
                     System.out.println("Opción no válida");
@@ -74,7 +57,7 @@ public class Main {
      * Método para obtener los datos de la matriz.
      * @return Matriz cuadrada de tipo entero.
      */
-    private static int[][] obtenerDatos(){
+    private static int[][] obtenerDatosCuadrada(){
         System.out.print("\nIngrese la dimensión de la matriz cuadrada: ");
         var size = sc.nextInt();
         sc.nextLine();
@@ -82,7 +65,7 @@ public class Main {
         // Manejar dimensiones negativas
         if (size<0){
             if (handleInputError("\nEl tamaño de la matriz no puede ser negativo.\n")){
-                return obtenerDatos();
+                return obtenerDatosCuadrada();
             }
 
             return null;
@@ -97,7 +80,7 @@ public class Main {
 
             // Validar la cantidad de datos por fila
             if (row.length>size){
-                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados.\n", i))){
+                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, size))){
                     --i;
                     continue;
                 } else {
@@ -138,9 +121,72 @@ public class Main {
        return matriz;
     }
 
+    /**
+     * Método para obtener los datos de la matriz nxm.
+     * @param n Número de filas
+     * @param m Número de columnas
+     * @return Matriz de tipo entero.
+     */
+    private static int[][] obtenerDatos(int n, int m){
+
+        int[][] matriz = new int[n][m];
+
+        // Llenar la matriz
+        for (int i = 0; i < n; i++) {
+            System.out.printf("Ingrese los %d(m) datos de la fila n=%d separados por espacios: ", m, i);
+            var row = sc.nextLine().split(" ");
+
+            // Validar la cantidad de datos por fila
+            if (row.length>m){
+                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, m))){
+                    --i;
+                    continue;
+                } else {
+                    return null;
+                }
+
+            } else if (row.length<m){
+                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, m))){
+                    --i ;
+                } else {
+                    return null;
+                }
+            }
+
+            // Validar que los datos sean números
+            for (int j = 0; j < n; j++) {
+                try{
+                    matriz[i][j] = Integer.parseInt(row[j]);
+
+                    // Validar que los datos sean enteros positivos o negativos
+                    if (matriz[i][j] == 0){
+                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n")){
+                            --i ;
+                        }else{
+                            return null;
+                        }
+                    }
+                } catch (NumberFormatException ignore){
+                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]))){
+                        --i ;
+                    }else{
+                        return null;
+                    }
+                }
+            }
+        }
+
+        return matriz;
+    }
+
+    /**
+     * Método para manejar errores de entrada.
+     * @param message Mensaje a mostrar al usuario.
+     * @return true si el usuario desea corregir los datos, false en caso contrario.
+     */
     private static boolean handleInputError(String message){
         System.out.println(message);
-        return getConfirmation("¿Desea volver a ingresar los datos erróneos?");
+        return getConfirmation("¿Desea corregir los datos erróneos?");
     }
 
     /**
@@ -174,6 +220,94 @@ public class Main {
         } finally {
             System.out.print("\n".repeat(50));
         }
+    }
+
+    /**
+     * Método para ejecutar la operación de suma de filas y columnas según las especificaciones del problema.
+     */
+    private static void sumaDeFilasYColumnas(){
+        clearScreen();
+        Matriz matriz = new Matriz();
+
+        int n = (int) Math.floor(Math.random()* 5 + 5);
+        int m = (int) Math.floor(Math.random()* 5 + 5);
+
+        System.out.printf("""
+                SUMA DE FILAS Y COLUMNAS
+                Dimensiones generadas:
+                    n: %d
+                    m: %d
+                    
+                """, n, m);
+
+        menu:
+        do{
+            System.out.print("""
+                Puede generar los datos aleatoriamente o ingresarlos manualmente.
+                ¿Qué desea hacer?
+                1. Generar datos aleatoriamente.
+                2. Ingresar datos manualmente.
+                0. Cancelar operación.
+                
+                Opción:""");
+
+            var option = sc.nextInt();
+            sc.nextLine();
+
+            switch (option){
+                case 1 -> {
+                    int[][] matrizAleatoria = new int[n][m];
+
+                    for (int i = 0; i < n; i++) {
+                        for (int j = 0; j < m; j++) {
+                            matrizAleatoria[i][j] = (int) Math.floor(Math.random()* 49 + 1);
+                        }
+                    }
+
+                    matriz = new Matriz(matrizAleatoria);
+                    System.out.println(matriz.procesarSuma());
+                    break menu;
+                }
+
+                case 2 -> {
+                    var base = obtenerDatos(n, m);
+                    if (base!=null){
+                        matriz = new Matriz(base);
+                        System.out.println(matriz.procesarSuma());
+                        break menu;
+                    }
+
+                    return;
+                }
+
+                case 0 -> {return;}
+
+                default -> System.out.println("\nOpción no válida.\n\n");
+            }
+        } while (true);
+
+        sc.nextLine();
+    }
+
+    /**
+     * Método para ejecutar las operaciones aritméticas a la matriz según las especificaciones del problema.
+     */
+    private static void operacionesAritmeticas(){
+        //TODO: Implementar
+    }
+
+    /**
+     * Método para ejecutar la operación de ordenar los elementos de la matriz según las especificaciones del problema.
+     */
+    private static void ordenarElementos(){
+        //TODO: Implementar
+    }
+
+    /**
+     * Método para ejecutar la operación de rotación de matrices según las especificaciones del problema.
+     */
+    private static void rotacionDeMatrices(){
+        //TODO: Implementar
     }
 
 }

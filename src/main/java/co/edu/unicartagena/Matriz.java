@@ -29,13 +29,25 @@ public class Matriz {
             throw new IllegalArgumentException("La matriz no puede ser vacía");
         }
 
+        this.matriz = matriz;
+    }
+
+    /**
+     * Método para verificar si la matriz es cuadrada.
+     * @return True si la matriz es cuadrada, false en caso contrario.
+     */
+    public boolean esCuadrada(){
+        if (matriz == null){
+            return false;
+        }
+
         for (int[] row : matriz) {
             if (matriz.length != row.length) {
-                throw new IllegalArgumentException("La matriz debe ser cuadrada");
+                return false;
             }
         }
 
-        this.matriz = matriz;
+        return true;
     }
 
     /**
@@ -69,7 +81,7 @@ public class Matriz {
         var header = new StringBuilder();
         var headerHeaders = new StringBuilder();
 
-        for (int i = 0; i < matriz.length; i++) {
+        for (int i = 0; i < matriz[0].length; i++) {
             headerHeaders.append(String.format(" %" + SPACING + "d ", i));
         }
 
@@ -112,10 +124,10 @@ public class Matriz {
      */
     private String getColSums(){
         StringBuilder colSums = new StringBuilder();
-        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(matriz)[0].length; i++) {
             int sum = 0;
-            for (int[] fila : matriz) {
-                sum += fila[i];
+            for (int[] col : matriz) {
+                sum += col[i];
             }
             colSums.append(String.format(" %" + SPACING + "d ", sum));
         }
