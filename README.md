@@ -7,4 +7,4 @@ Diseñe un algoritmo que lea una matriz de ```n x m``` (n y m generados aleatori
 | 1              | 9  | 6  | 7  | 22   |
 | Suma           | 14 | 11 | 15 | ---  |
 
-**Solución:** El método ``suma_filas_columnas`` en la clase principal utiliza la matriz cuadrada y retorna un ``string`` con la matriz formateada para contener la suma de las filas y la suma de las columnas, además de sus propios valores.
+**Solución:** El método ``getSumMatriz()`` en la clase principal utiliza la matriz cuadrada y retorna un ``string`` con la matriz formateada para contener la suma de las filas y la suma de las columnas, además de sus propios valores.
