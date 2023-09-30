@@ -15,8 +15,8 @@ Diseñe un algoritmo que lea una matriz de ```n x m``` (n y m generados aleatori
 | Suma           | 14 | 11 | 15 | ---  |
 
 ### Restricciones
-- Hay que pedir el tamaño de la matriz. ❌
-- Los valores generados deben estar en el rango entre 5 y 10. ❌
+- Hay que pedir el tamaño de la matriz. ✅
+- Los valores generados deben estar en el rango entre 5 y 10. ✅
 - El programa debe ser capaz de generar las sumas de filas y columnas ✅
 
 ## Operaciones aritméticas en una matriz
