@@ -15,6 +15,9 @@ public class Main {
      */
     public static void main(String[] args) {
         do {
+            // Limpiar la vista
+            clearScreen();
+
             System.out.print("""
                     Menu
                     1. Sumas de filas y columnas
@@ -41,11 +44,8 @@ public class Main {
                 default -> System.out.println("Opción no válida");
             }
 
-            // Pequeña pausa para que el usuario pueda leer el resultado
+            System.out.println("\nPresione enter para continuar...");
             sc.nextLine();
-
-            // Limpiar la vista
-            clearScreen();
         } while (true);
 
     }
@@ -316,8 +316,6 @@ public class Main {
                 default -> System.out.println("\nOpción no válida.\n\n");
             }
         } while (true);
-
-        sc.nextLine();
     }
 
     /**
