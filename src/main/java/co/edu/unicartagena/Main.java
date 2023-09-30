@@ -9,17 +9,13 @@ public class Main {
     private static final Scanner sc = new Scanner(System.in);
 
     /**
-     * Espacio entre los datos de la matriz
-     */
-    private static final int SPACING = 8;
-    private static int[][] matriz = {{1, 2}, {3, 4}};
-
-    /**
      * Método principal: Ejecuta el menú principal del programa.
      *
      * @param args Argumentos de la línea de comandos
      */
     public static void main(String[] args) {
+        Matriz matriz = new Matriz();
+
         do {
             System.out.print("""
                     Menu
@@ -37,17 +33,31 @@ public class Main {
                     System.exit(0);
                 }
 
-                case 2 -> {
+                case 1 -> {
+                    var datos = obtenerDatos();
+                    if (datos == null){
+                        continue;
+                    }
+
                     try{
-                        System.out.println(getSumMatriz());
-                    } catch (NullPointerException e){
+                        matriz = new Matriz(datos);
+
+                        System.out.println("\nMatriz creada con éxito");
+                    } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage());
                     }
                 }
 
+                case 2 -> {
+                   try {
+                       System.out.println(matriz.procesarSuma());
+                   } catch (NullPointerException e){
+                       System.out.println(e.getMessage());
+                   }
+                }
+
                 default -> {
                     System.out.println("Opción no válida");
-                    sc.nextLine();
                 }
             }
 
@@ -61,101 +71,87 @@ public class Main {
     }
 
     /**
-     * Revisa si la matriz ha sido inicializada
-     * @throws NullPointerException Si la matriz no ha sido inicializada
+     * Método para obtener los datos de la matriz.
+     * @return Matriz cuadrada de tipo entero.
      */
-    private static void checkMatriz() throws NullPointerException{
-        if (matriz.length == 0) {
-            throw new NullPointerException("La matriz no ha sido inicializada. Llene la matriz antes de continuar con la operación.");
-        }
-    }
+    private static int[][] obtenerDatos(){
+        System.out.print("\nIngrese la dimensión de la matriz cuadrada: ");
+        var size = sc.nextInt();
+        sc.nextLine();
 
-    /**
-     * Calcula la suma de las filas y columnas de la matriz y genera un string con formato de tabla.
-     * @return String con formato de tabla que contiene la matriz y la suma de sus filas y columnas.
-     * @throws NullPointerException Si la matriz no ha sido inicializada
-     */
-    public static String getSumMatriz() throws NullPointerException{
-        checkMatriz();
-
-        StringBuilder matrizText = new StringBuilder();
-        var specialSpacing = 14;
-
-        // Llenar el encabezado
-        var headerFormat = "Filas/Columnas %s %"+specialSpacing+"s\n";
-        var header = new StringBuilder();
-        var headerHeaders = new StringBuilder();
-
-        for (int i = 0; i < matriz.length; i++) {
-            headerHeaders.append(String.format(" %" + SPACING + "d ", i));
-        }
-
-        header.append(String.format(headerFormat, headerHeaders, "Suma"));
-
-        // Agregar el encabezado a la matriz
-        matrizText.append(header);
-
-        // Llenar el cuerpo de la matriz
-        for (int i=0; i<matriz.length; i++) {
-
-            // Indice de la fila
-            StringBuilder filaText = new StringBuilder(String.format("%"+specialSpacing+"d ", i));
-
-            // Obtención de valores
-            for (int dato : matriz[i]) {
-                var datoText = String.format(" %"+SPACING+"d ", dato);
-
-                filaText.append(datoText);
+        // Manejar dimensiones negativas
+        if (size<0){
+            if (handleInputError("\nEl tamaño de la matriz no puede ser negativo.\n")){
+                return obtenerDatos();
             }
 
-            matrizText.append(filaText);
-
-            // Obtener la suma de la fila
-            matrizText.append(getRowSum(i, specialSpacing)).append("\n");
+            return null;
         }
 
-        // Llenar el pie de la matriz con la suma de las columnas
-        var footer = String.format("%"+specialSpacing+"s %s %"+specialSpacing+"s", "Suma", getColSums(), "---");
-        // Adjuntar el pie de la matriz
-        matrizText.append(footer);
+        int[][] matriz = new int[size][size];
 
-        // Retornar la matriz
-        return matrizText.toString();
-    }
-
-    /**
-     * Obtiene la suma de las columnas de la matriz
-     * @return Suma de las columnas de la matriz
-     */
-    private static String getColSums(){
-        StringBuilder colSums = new StringBuilder();
+        // Llenar la matriz
         for (int i = 0; i < matriz.length; i++) {
-            int sum = 0;
-            for (int[] fila : matriz) {
-                sum += fila[i];
+            System.out.printf("Ingrese los datos de la fila %d separados por espacios: ", i);
+            var row = sc.nextLine().split(" ");
+
+            // Validar la cantidad de datos por fila
+            if (row.length>size){
+                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados.\n", i))){
+                    --i;
+                    continue;
+                } else {
+                    return null;
+                }
+
+            } else if (row.length<size){
+                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, size))){
+                    --i ;
+                } else {
+                    return null;
+                }
             }
-            colSums.append(String.format(" %" + SPACING + "d ", sum));
+
+            // Validar que los datos sean números
+            for (int j = 0; j < matriz.length; j++) {
+                try{
+                    matriz[i][j] = Integer.parseInt(row[j]);
+
+                    // Validar que los datos sean enteros positivos o negativos
+                    if (matriz[i][j] == 0){
+                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n")){
+                            --i ;
+                        }else{
+                            return null;
+                        }
+                    }
+                } catch (NumberFormatException ignore){
+                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]))){
+                       --i ;
+                    }else{
+                        return null;
+                    }
+                }
+            }
         }
 
-        return colSums.toString();
+       return matriz;
+    }
+
+    private static boolean handleInputError(String message){
+        System.out.println(message);
+        return getConfirmation("¿Desea volver a ingresar los datos erróneos?");
     }
 
     /**
-     * Obtiene la suma de los elementos de la fila i
-     * @param i Índice de la fila
-     * @param dataWidth Ancho o espacio que ocuparán los dentro del String resultante.
-     * @return Suma de los elementos de la fila i
+     * Pregunta al usuario si desea continuar con una determinada operación.
+     * @param message Mensaje a mostrar al usuario
+     * @return true si el usuario desea continuar, false en caso contrario.
      */
-    private static String getRowSum(int i, int dataWidth){
-        StringBuilder rowSum = new StringBuilder();
-        int sum = 0;
-        for (int dato : matriz[i]) {
-            sum += dato;
-        }
-
-        rowSum.append(String.format(" %" + dataWidth + "d ", sum));
-
-        return rowSum.toString();
+    private static boolean getConfirmation(String message){
+        System.out.printf("%s (s): ", message);
+        var confirmation = sc.nextLine();
+        return confirmation.equalsIgnoreCase("s");
     }
 
     /**
