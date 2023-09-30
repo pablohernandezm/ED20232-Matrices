@@ -291,7 +291,7 @@ public class Main {
 
             switch (option){
                 case 1 -> {
-                    matriz = new Matriz(generarMatrizAleatoria(n, m, 1, 50));
+                    matriz = new Matriz(generarMatrizAleatoria(n, m, 5, 10));
                     System.out.println(matriz.procesarSuma());
                     break menu;
                 }
