@@ -67,7 +67,7 @@ public class Matriz {
      */
     @Override
     public String toString() {
-        return handleToString(llenarEncabezado().toString());
+        return handleToString(llenarEncabezado().toString()+"\n");
     }
 
     private String handleToString(String header) {
@@ -166,7 +166,7 @@ public class Matriz {
         var specialSpacing = 14;
 
         // Llenar el encabezado
-        var header = llenarEncabezado("Suma", "%" + specialSpacing + "s");
+        var header = llenarEncabezado("Suma", "%" + specialSpacing + "s").append("\n");
 
         // Llenar el pie de la matriz con la suma de las columnas
         var footer = String.format("%" + specialSpacing + "s %s %" + specialSpacing + "s", "Suma", getColSums(), "---");
