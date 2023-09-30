@@ -7,6 +7,10 @@ public class Main {
      * Scanner para leer datos de la consola
      */
     private static final Scanner sc = new Scanner(System.in);
+
+    /**
+     * Espacio entre los datos de la matriz
+     */
     private static final int SPACING = 8;
     private static int[][] matriz = {{1, 2}, {3, 4}};
 
@@ -66,23 +70,11 @@ public class Main {
         }
     }
 
-    public static String getStringMatriz() throws NullPointerException{
-        checkMatriz();
-
-        StringBuilder matrizText = new StringBuilder();
-
-        for (int[] fila : matriz) {
-            StringBuilder filaText = new StringBuilder();
-            for (int dato : fila) {
-                filaText.append(dato).append(" ");
-            }
-
-            matrizText.append(filaText).append("\n");
-        }
-
-        return matrizText.toString();
-    }
-
+    /**
+     * Calcula la suma de las filas y columnas de la matriz y genera un string con formato de tabla.
+     * @return String con formato de tabla que contiene la matriz y la suma de sus filas y columnas.
+     * @throws NullPointerException Si la matriz no ha sido inicializada
+     */
     public static String getSumMatriz() throws NullPointerException{
         checkMatriz();
 
