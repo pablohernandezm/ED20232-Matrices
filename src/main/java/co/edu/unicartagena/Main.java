@@ -223,12 +223,47 @@ public class Main {
     }
 
     /**
+     * Método para generar una matriz aleatoria.
+     * @param n dimensión 'n' de la matriz 'nxm'.
+     * @param m dimensión 'm' de la matriz 'nxm'.
+     * @param min valor mínimo de los datos de la matriz.
+     * @param max valor máximo de los datos de la matriz.
+     * @return Matriz de tipo entero.
+     */
+    private static int[][] generarMatrizAleatoria(int n, int m, int min, int max){
+        if (n<=0 || m<=0){
+            throw new IllegalArgumentException("""
+                    Las dimensiones de la matriz no pueden ser negativas o cero.
+                    Valores ingresados:
+                    n: %d.
+                    m: %d.
+                    """.formatted(n, m));
+        } else if(min>max){
+            throw new IllegalArgumentException("""
+                    El valor mínimo no puede ser mayor al valor máximo.
+                    Valor mínimo ingresado: %d.
+                    Valor máximo ingresado: %d.
+                    """.formatted(min, max));
+        }
+
+        int[][] matrizAleatoria = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                matrizAleatoria[i][j] = (int) Math.floor((Math.random()* (max-min)) + min);
+            }
+        }
+
+        return matrizAleatoria;
+    }
+    /**
      * Método para ejecutar la operación de suma de filas y columnas según las especificaciones del problema.
      */
     private static void sumaDeFilasYColumnas(){
         clearScreen();
-        Matriz matriz = new Matriz();
+        Matriz matriz;
 
+        // Valores aleatorios generados entre 5 y 10 para 'n' y 'm'.
         int n = (int) Math.floor(Math.random()* 5 + 5);
         int m = (int) Math.floor(Math.random()* 5 + 5);
 
@@ -256,15 +291,7 @@ public class Main {
 
             switch (option){
                 case 1 -> {
-                    int[][] matrizAleatoria = new int[n][m];
-
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < m; j++) {
-                            matrizAleatoria[i][j] = (int) Math.floor(Math.random()* 49 + 1);
-                        }
-                    }
-
-                    matriz = new Matriz(matrizAleatoria);
+                    matriz = new Matriz(generarMatrizAleatoria(n, m, 1, 50));
                     System.out.println(matriz.procesarSuma());
                     break menu;
                 }
