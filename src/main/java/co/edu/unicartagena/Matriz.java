@@ -1,5 +1,6 @@
 package co.edu.unicartagena;
 
+import java.util.IllegalFormatException;
 import java.util.Objects;
 
 public class Matriz {
@@ -13,19 +14,13 @@ public class Matriz {
     private final int[][] matriz;
 
     /**
-     * Constructor de la clase por defecto.
-     */
-    public Matriz(){
-        matriz = null;
-    }
-
-    /**
      * Constructor de la clase
+     *
      * @param matriz Matriz cuadrada de tipo T.
      * @throws IllegalArgumentException Si la matriz no es cuadrada o está vacía.
      */
     public Matriz(int[][] matriz) throws IllegalArgumentException {
-        if (matriz.length == 0){
+        if (matriz.length == 0) {
             throw new IllegalArgumentException("La matriz no puede ser vacía");
         }
 
@@ -34,13 +29,10 @@ public class Matriz {
 
     /**
      * Método para verificar si la matriz es cuadrada.
+     *
      * @return True si la matriz es cuadrada, false en caso contrario.
      */
-    public boolean esCuadrada(){
-        if (matriz == null){
-            return false;
-        }
-
+    public boolean esCuadrada() {
         for (int[] row : matriz) {
             if (matriz.length != row.length) {
                 return false;
@@ -52,6 +44,7 @@ public class Matriz {
 
     /**
      * Método para obtener la matriz.
+     *
      * @return Matriz de tipo T.
      */
     public int[][] getMatriz() {
@@ -60,57 +53,31 @@ public class Matriz {
 
     /**
      * Método para obtener la dimensión de la matriz.
+     *
      * @return Dimensión de la matriz.
      */
-    public int getDimension(){return this.matriz == null? 0 : this.matriz.length;}
-
-
-    /**
-     * Método para llenar una determinada fila de la matriz, con el formato adecuado y sus índices.
-     * @param indexSpacing Espacio que ocupará el índice de la fila.
-     * @param index Índice de la fila a llenar.
-     * @return Fila de la matriz en forma de StringBuilder.
-     */
-    private StringBuilder llenarFila(int indexSpacing, int index){
-        // Indice de la fila
-        StringBuilder filaText = new StringBuilder(String.format("%"+indexSpacing+"d ", index));
-
-        // Obtención de valores
-        for (int dato : Objects.requireNonNull(matriz)[index]) {
-            var datoText = String.format(" %"+SPACING+"s ", dato);
-
-            filaText.append(datoText);
-        }
-
-        return filaText;
+    public int getDimension() {
+        return this.matriz.length;
     }
-    /**
-     * Método para procesar la suma de filas y columna de la matriz.
-     * @return Matriz procesada en forma de String con las sumas de filas y columnas.
-     */
-    public String procesarSuma() throws NullPointerException {
-        if (matriz == null){
-            throw new NullPointerException("La matriz no tiene valores. Asegúrese de llenarla para continuar con la operación");
-        }
 
+    /**
+     * Método recibir el string de la matriz.
+     *
+     * @return matriz en forma de String.
+     */
+    @Override
+    public String toString() {
+        return handleToString(llenarEncabezado().toString());
+    }
+
+    private String handleToString(String header) {
         StringBuilder matrizText = new StringBuilder();
         var specialSpacing = 14;
 
-        // Llenar el encabezado
-        var headerFormat = "Filas/Columnas %s %"+specialSpacing+"s\n";
-        var header = new StringBuilder();
-        var headerHeaders = new StringBuilder();
-
-        for (int i = 0; i < matriz[0].length; i++) {
-            headerHeaders.append(String.format(" %" + SPACING + "d ", i));
-        }
-
-        header.append(String.format(headerFormat, headerHeaders, "Suma"));
-
-        // Agregar el encabezado a la matriz
         matrizText.append(header);
+
         // Llenar el cuerpo de la matriz
-        for (int i = 0; i< Objects.requireNonNull(matriz).length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
 
             // Indice de la fila
             StringBuilder filaText = llenarFila(specialSpacing, i);
@@ -121,20 +88,102 @@ public class Matriz {
             matrizText.append(getRowSum(i, specialSpacing)).append("\n");
         }
 
+        return matrizText.toString();
+    }
+
+    private String handleToString(String header, String footer) {
+        return handleToString(header) + footer;
+    }
+
+
+    /**
+     * Método para llenar una determinada fila de la matriz, con el formato adecuado y sus índices.
+     *
+     * @param indexSpacing Espacio que ocupará el índice de la fila.
+     * @param index        Índice de la fila a llenar.
+     * @return Fila de la matriz en forma de StringBuilder.
+     */
+    private StringBuilder llenarFila(int indexSpacing, int index) {
+        // Indice de la fila
+        StringBuilder filaText = new StringBuilder(String.format("%" + indexSpacing + "d ", index));
+
+        // Obtención de valores
+        for (int dato : Objects.requireNonNull(matriz)[index]) {
+            var datoText = String.format(" %" + SPACING + "s ", dato);
+
+            filaText.append(datoText);
+        }
+
+        return filaText;
+    }
+
+    /**
+     * Método para llenar el encabezado de la matriz.
+     *
+     * @return Encabezado de la matriz en forma de StringBuilder.
+     */
+    private StringBuilder llenarEncabezado() {
+        // Llenar el encabezado
+        var headerFormat = "Filas/Columnas %s";
+        var header = new StringBuilder();
+        var headerHeaders = new StringBuilder();
+
+        for (int i = 0; i < Objects.requireNonNull(matriz)[0].length; i++) {
+            headerHeaders.append(String.format(" %" + SPACING + "d ", i));
+        }
+
+        header.append(String.format(headerFormat, headerHeaders));
+
+        return header;
+    }
+
+    /**
+     * Método para llenar el encabezado de la matriz recibiendo un parámetro adicional (última columna).
+     *
+     * @param adicional       Parámetro adicional a agregar al encabezado.
+     * @param adicionalFormat Formato del parámetro adicional.
+     * @return Encabezado de la matriz en forma de StringBuilder.
+     */
+    private StringBuilder llenarEncabezado(String adicional, String adicionalFormat) {
+        StringBuilder header = llenarEncabezado();
+
+        header.append(" ");
+
+        try {
+            adicional = String.format(adicionalFormat, adicional);
+        } catch (IllegalFormatException ignored) {
+        }
+
+        return header.append(adicional);
+    }
+
+    /**
+     * Método para procesar la suma de filas y columna de la matriz.
+     *
+     * @return Matriz procesada en forma de String con las sumas de filas y columnas.
+     */
+    public String procesarSuma() throws NullPointerException {
+        var specialSpacing = 14;
+
+        // Llenar el encabezado
+        var header = llenarEncabezado("Suma", "%" + specialSpacing + "s");
+
         // Llenar el pie de la matriz con la suma de las columnas
-        var footer = String.format("%"+specialSpacing+"s %s %"+specialSpacing+"s", "Suma", getColSums(), "---");
-        // Adjuntar el pie de la matriz
-        matrizText.append(footer);
+        var footer = String.format("%" + specialSpacing + "s %s %" + specialSpacing + "s", "Suma", getColSums(), "---");
+
+        // Completar la matriz
+
 
         // Retornar la matriz
-        return matrizText.toString();
+        return handleToString(header.toString(), footer);
     }
 
     /**
      * Obtiene la suma de las columnas de la matriz
+     *
      * @return Suma de las columnas de la matriz
      */
-    private String getColSums(){
+    private String getColSums() {
         StringBuilder colSums = new StringBuilder();
         for (int i = 0; i < Objects.requireNonNull(matriz)[0].length; i++) {
             int sum = 0;
@@ -149,11 +198,12 @@ public class Matriz {
 
     /**
      * Obtiene la suma de los elementos de la fila i
-     * @param i Índice de la fila
+     *
+     * @param i         Índice de la fila
      * @param dataWidth Ancho o espacio que ocuparán los dentro del String resultante.
      * @return Suma de los elementos de la fila i
      */
-    private String getRowSum(int i, int dataWidth){
+    private String getRowSum(int i, int dataWidth) {
         StringBuilder rowSum = new StringBuilder();
         int sum = 0;
         for (int dato : Objects.requireNonNull(matriz)[i]) {
@@ -164,4 +214,5 @@ public class Matriz {
 
         return rowSum.toString();
     }
+
 }
