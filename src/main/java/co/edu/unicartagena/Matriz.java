@@ -8,10 +8,17 @@ public class Matriz {
      * Espacio entre los datos de la matriz
      */
     private static final int SPACING = 8;
+
+    /**
+     * Espacio entre los datos de la matriz para encabezados especiales
+     */
+    private static final int specialSpacing = 14;
+
     /**
      * Matriz de datos
      */
     private final int[][] matriz;
+
 
     /**
      * Constructor de la clase
@@ -34,12 +41,26 @@ public class Matriz {
      */
     @Override
     public String toString() {
-        return handleToString(llenarEncabezado() + "\n");
+        StringBuilder str = new StringBuilder();
+        str.append(llenarEncabezado()).append("\n");
+
+        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
+            str.append(String.format("%" + specialSpacing + "d ", i));
+
+            for (int j = 0; j < matriz[i].length; j++) {
+                var datoFormat = " %" + SPACING + "d ";
+
+                str.append(String.format(datoFormat, matriz[i][j]));
+            }
+            str.append("\n");
+        }
+
+        return str.toString();
     }
 
-    private String handleToString(String header) {
+    private String handleToStringSum(String header) {
         StringBuilder matrizText = new StringBuilder();
-        var specialSpacing = 14;
+
 
         matrizText.append(header);
 
@@ -47,31 +68,30 @@ public class Matriz {
         for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
 
             // Indice de la fila
-            StringBuilder filaText = llenarFila(specialSpacing, i);
+            StringBuilder filaText = llenarFila(i);
 
             matrizText.append(filaText);
 
             // Obtener la suma de la fila
-            matrizText.append(getRowSum(i, specialSpacing)).append("\n");
+            matrizText.append(getRowSum(i)).append("\n");
         }
 
         return matrizText.toString();
     }
 
     private String handleToString(String header, String footer) {
-        return handleToString(header) + footer;
+        return handleToStringSum(header) + footer;
     }
 
     /**
      * Método para llenar una determinada fila de la matriz, con el formato adecuado y sus índices.
      *
-     * @param indexSpacing Espacio que ocupará el índice de la fila.
-     * @param index        Índice de la fila a llenar.
+     * @param index Índice de la fila a llenar.
      * @return Fila de la matriz en forma de StringBuilder.
      */
-    private StringBuilder llenarFila(int indexSpacing, int index) {
+    private StringBuilder llenarFila(int index) {
         // Indice de la fila
-        StringBuilder filaText = new StringBuilder(String.format("%" + indexSpacing + "d ", index));
+        StringBuilder filaText = new StringBuilder(String.format("%" + specialSpacing + "d ", index));
 
         // Obtención de valores
         for (int dato : Objects.requireNonNull(matriz)[index]) {
@@ -137,9 +157,6 @@ public class Matriz {
         // Llenar el pie de la matriz con la suma de las columnas
         var footer = String.format("%" + specialSpacing + "s %s %" + specialSpacing + "s", "Suma", getColSums(), "---");
 
-        // Completar la matriz
-
-
         // Retornar la matriz
         return handleToString(header.toString(), footer);
     }
@@ -165,20 +182,64 @@ public class Matriz {
     /**
      * Obtiene la suma de los elementos de la fila i
      *
-     * @param i         Índice de la fila
-     * @param dataWidth Ancho o espacio que ocuparán los dentro del String resultante.
+     * @param i Índice de la fila
      * @return Suma de los elementos de la fila i
      */
-    private String getRowSum(int i, int dataWidth) {
+    private String getRowSum(int i) {
         StringBuilder rowSum = new StringBuilder();
         int sum = 0;
         for (int dato : Objects.requireNonNull(matriz)[i]) {
             sum += dato;
         }
 
-        rowSum.append(String.format(" %" + dataWidth + "d ", sum));
+        rowSum.append(String.format(" %" + specialSpacing + "d ", sum));
 
         return rowSum.toString();
     }
 
+    /**
+     * Obtiene la suma de los elementos de la diagonal principal de la matriz.
+     *
+     * @return Suma de los elementos de la diagonal principal de la matriz.
+     */
+    public int sumDiagonal() {
+        int sum = 0;
+        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                if (i == j) {
+                    sum += matriz[i][j];
+                }
+            }
+        }
+
+        return sum;
+    }
+
+    /**
+     * Método para obtener la diagonal principal de la matriz en forma de String.
+     *
+     * @return Diagonal principal de la matriz en forma de String.
+     */
+    public String getPrincipalDiagonal() {
+        StringBuilder str = new StringBuilder();
+        str.append(llenarEncabezado()).append("\n");
+
+        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
+            str.append(String.format("%" + specialSpacing + "d ", i));
+
+            for (int j = 0; j < matriz[i].length; j++) {
+                var datoFormat = " %" + SPACING + "s ";
+
+                if (i != j) {
+                    str.append(String.format(datoFormat, 0));
+                } else {
+                    str.append(String.format(datoFormat, matriz[i][j]));
+                }
+            }
+
+            str.append("\n");
+        }
+
+        return str.toString();
+    }
 }

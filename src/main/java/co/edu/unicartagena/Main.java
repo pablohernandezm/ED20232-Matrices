@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         do {
             // Limpiar la vista
-            clearScreen();
+            cleanConsole();
 
             System.out.print("""
                     Menu
@@ -89,7 +89,7 @@ public class Main {
     /**
      * Limpiar la consola si es posible. Imprimir saltos de línea en caso de estar en un entorno emulado o sistemas que no soporten estos procesos.
      */
-    private static void clearScreen() {
+    private static void cleanConsole() {
         try {
             // if os is windows
             if (System.getProperty("os.name").contains("Windows")) {
@@ -103,7 +103,7 @@ public class Main {
 
         } catch (Exception ignore) {
         } finally {
-            System.out.print("\n".repeat(50));
+            System.out.print("\n".repeat(100));
         }
     }
 
@@ -184,7 +184,7 @@ public class Main {
      * @param max valor máximo de los datos de la matriz.
      * @return Matriz de tipo entero.
      */
-    private static int[][] generarMatrizAleatoria(int n, int m, int min, int max, boolean excludeZero) {
+    private static int[][] generarMatrizAleatoria(int n, int m, int min, int max, boolean excludeZero, boolean includeNegatives) {
         if (n <= 0 || m <= 0) {
             throw new IllegalArgumentException("""
                     Las dimensiones de la matriz no pueden ser negativas o cero.
@@ -212,7 +212,7 @@ public class Main {
                     continue;
                 }
 
-                if (random.nextBoolean()) {
+                if (includeNegatives && random.nextBoolean()) {
                     aleatorio *= -1;
                 }
 
@@ -232,7 +232,7 @@ public class Main {
      * @param max valor máximo de los datos de la matriz.
      * @return Optional con la matriz generada o vacío si el usuario cancela la operación.
      */
-    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max, boolean excludeZero) {
+    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max, boolean excludeZero, boolean includeNegatives) {
         int[][] matriz = null;
         menu:
         do {
@@ -249,7 +249,7 @@ public class Main {
                 sc.nextLine();
 
                 switch (option) {
-                    case 1 -> matriz = generarMatrizAleatoria(n, m, min, max, excludeZero);
+                    case 1 -> matriz = generarMatrizAleatoria(n, m, min, max, excludeZero, includeNegatives);
 
                     case 2 -> matriz = obtenerDatos(n, m, excludeZero);
 
@@ -266,7 +266,7 @@ public class Main {
                         "¿Desea volver a seleccionar una opción?")) {
                     break;
                 } else {
-                    clearScreen();
+                    cleanConsole();
                 }
             }
 
@@ -279,7 +279,7 @@ public class Main {
      * Método para ejecutar la operación de suma de filas y columnas según las especificaciones del problema.
      */
     private static void sumaDeFilasYColumnas() {
-        clearScreen();
+        cleanConsole();
 
         // Valores aleatorios generados entre 5 y 10 para 'n' y 'm'.
         int n = (int) Math.floor(Math.random() * 5 + 5);
@@ -292,7 +292,7 @@ public class Main {
                     m: %d
                     
                 """, n, m);
-        var obtenida = preguntarFormaDeLlenado(n, m, 5, 10, false);
+        var obtenida = preguntarFormaDeLlenado(n, m, 5, 10, false, false);
         obtenida.ifPresent(value -> {
             Matriz matriz = new Matriz(value);
             System.out.println(matriz.procesarSuma());
@@ -303,16 +303,17 @@ public class Main {
      * Método para ejecutar las operaciones aritméticas a la matriz según las especificaciones del problema.
      */
     private static void operaciones() {
-        clearScreen();
-        System.out.println("""
+        cleanConsole();
+        System.out.print("""
                 OPERACIONES ARITMÉTICAS
                 Ingrese el tamaño n de la matriz nxn.
                 n:""");
 
         try {
             var n = sc.nextInt();
+            System.out.println("\n");
 
-            var obtenida = preguntarFormaDeLlenado(n, n, -10, 10, true);
+            var obtenida = preguntarFormaDeLlenado(n, n, -50, 50, true, true);
 
             obtenida.ifPresent(Main::procesarOperaciones);
 
@@ -326,11 +327,22 @@ public class Main {
         }
     }
 
+    /**
+     * Método para procesar las operaciones aritméticas a la matriz según las especificaciones del problema.
+     *
+     * @param value Matriz de tipo entero.
+     */
     private static void procesarOperaciones(int[][] value) {
-        clearScreen();
+        cleanConsole();
         Matriz matriz = new Matriz(value);
+        System.out.printf("""
+                MATRIZ GENERADA
+                %s
+                                
+                                
+                """, matriz);
 
-        System.out.println("""
+        System.out.print("""
                 OPERACIONES ARITMÉTICAS
                 1. Suma de los elementos de la diagonal principal.
                 2. Multiplicación de los elementos de la diagonal secundaria.
@@ -341,9 +353,26 @@ public class Main {
 
         try {
             var option = sc.nextInt();
+            sc.nextLine();
 
+            cleanConsole();
             switch (option) {
-                case 1 -> System.out.println(matriz + "\n1");
+                case 1 -> {
+                    System.out.printf("""
+                            MATRIZ GENERADA
+                            %s
+                                                        
+                                                        
+                            DIAGONAL DE LA MATRIZ
+                            %s
+                                                        
+                                                        
+                            La suma de los elementos de la diagonal principal es: %d.
+                            """, matriz, matriz.getPrincipalDiagonal(), matriz.sumDiagonal());
+                    sc.nextLine();
+
+                }
+
                 case 2 -> System.out.println(matriz + "\n2");
                 case 3 -> System.out.println(matriz + "\n3");
                 case 0 -> {

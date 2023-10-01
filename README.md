@@ -20,11 +20,11 @@ Diseñe un algoritmo que lea una matriz de ```n x m``` (n y m generados aleatori
 
 ## Operaciones aritméticas en una matriz
 Diseñe un algoritmo que cumpla con las siguientes características:
-- La matriz debe ser cuadrada. ❌
-- Se debe solicitar al usuario la dimensión de la matriz. ❌
-- La matriz debe contener únicamente números enteros **positivos** o **negativos**, el número ``0`` no está incluido. ❌
+- La matriz debe ser cuadrada. ✅
+- Se debe solicitar al usuario la dimensión de la matriz. ✅
+- La matriz debe contener únicamente números enteros **positivos** o **negativos**, el número ``0`` no está incluido. ✅
 - Se debe imprimir: 
-  - La suma de los elementos de la diagonal principal. ❌
+  - La suma de los elementos de la diagonal principal. ✅
   - La multiplicación de los elementos de la diagonal secundaria. ❌
   - La división entre la suma y la multiplicación anteriores. ❌
 
