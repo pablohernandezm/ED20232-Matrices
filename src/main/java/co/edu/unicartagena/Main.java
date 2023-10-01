@@ -2,6 +2,7 @@ package co.edu.unicartagena;
 
 import java.util.InputMismatchException;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -63,87 +64,6 @@ public class Main {
     }
 
     /**
-     * Método para obtener los datos de la matriz.
-     *
-     * @return Matriz cuadrada de tipo entero.
-     */
-    private static int[][] obtenerDatosCuadrada(int size) throws IllegalArgumentException {
-        if (size <= 0) {
-            throw new IllegalArgumentException("El tamaño de la matriz no puede ser negativo o cero.");
-        }
-
-        return obtenerDatos(size, size);
-    }
-
-    /**
-     * Método para obtener los datos de la matriz nxm.
-     *
-     * @param n Número de filas
-     * @param m Número de columnas
-     * @return Matriz de tipo entero.
-     */
-    private static int[][] obtenerDatos(int n, int m) {
-        if (n <= 0 || m <= 0)
-            throw new IllegalArgumentException("Las dimensiones de la matriz no pueden ser negativas o cero.");
-
-        int[][] matriz = new int[n][m];
-
-        // Llenar la matriz
-        for (int i = 0; i < n; i++) {
-            var messageError = "¿Desea corregir la fila %d?".formatted(i);
-
-            System.out.printf("Ingrese los %d datos(m) de la fila n=%d separados por espacios: ", m, i);
-            var row = sc.nextLine().split(" ");
-
-            // Validar la cantidad de datos por fila
-            if (row.length > m) {
-                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, m),
-                        messageError)) {
-                    --i;
-                    continue;
-                } else {
-                    return null;
-                }
-
-            } else if (row.length < m) {
-                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, m),
-                        messageError)) {
-                    --i;
-                } else {
-                    return null;
-                }
-            }
-
-            // Validar que los datos sean números
-            for (int j = 0; j < n; j++) {
-                messageError = "¿Desea corregir la fila %d?".formatted(i);
-
-                try {
-                    matriz[i][j] = Integer.parseInt(row[j]);
-
-                    // Validar que los datos sean enteros positivos o negativos
-                    if (matriz[i][j] == 0) {
-                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n",
-                                messageError)) {
-                            --i;
-                        } else {
-                            return null;
-                        }
-                    }
-                } catch (NumberFormatException ignore) {
-                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]), messageError)) {
-                        --i;
-                    } else {
-                        return null;
-                    }
-                }
-            }
-        }
-
-        return matriz;
-    }
-
-    /**
      * Método para manejar errores de entrada.
      *
      * @param message Mensaje a mostrar al usuario.
@@ -188,6 +108,74 @@ public class Main {
     }
 
     /**
+     * Método para obtener los datos de la matriz nxm.
+     *
+     * @param n Número de filas
+     * @param m Número de columnas
+     * @return Matriz de tipo entero.
+     */
+    private static int[][] obtenerDatos(int n, int m, boolean excludeZero) {
+        if (n <= 0 || m <= 0)
+            throw new IllegalArgumentException("Las dimensiones de la matriz no pueden ser negativas o cero.");
+
+        int[][] matriz = new int[n][m];
+
+        // Llenar la matriz
+        for (int i = 0; i < n; i++) {
+            var messageError = "¿Desea corregir la fila %d?".formatted(i);
+
+            System.out.printf("Ingrese los %d datos(m) de la fila n=%d separados por espacios: ", m, i);
+            var row = sc.nextLine().split(" ");
+
+            // Validar la cantidad de datos por fila
+            if (row.length > m) {
+                if (handleInputError(String.format("\nLa fila %d tiene más datos de los esperados(%d de %d).\n", i, row.length, m),
+                        messageError)) {
+                    --i;
+                    continue;
+                } else {
+                    return null;
+                }
+
+            } else if (row.length < m) {
+                if (handleInputError(String.format("\nLa fila %d tiene menos datos de los esperados(%d de %d).\n", i, row.length, m),
+                        messageError)) {
+                    --i;
+                } else {
+                    return null;
+                }
+            }
+
+            // Validar que los datos sean números
+            for (int j = 0; j < n; j++) {
+                messageError = "¿Desea corregir la fila %d?".formatted(i);
+
+                try {
+                    matriz[i][j] = Integer.parseInt(row[j]);
+
+                    // Validar que los datos sean enteros positivos o negativos
+                    if (matriz[i][j] == 0 && excludeZero) {
+                        if (handleInputError("\nLa matriz solo puede contener números enteros positivos o negativos. El cero no está permitido.\n",
+                                messageError)) {
+                            --i;
+                        } else {
+                            return null;
+                        }
+                    }
+                } catch (NumberFormatException ignore) {
+                    if (handleInputError(String.format("\nEl valor %s no es un número válido.\n", row[j]), messageError)) {
+                        --i;
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        return matriz;
+    }
+
+    /**
      * Método para generar una matriz aleatoria.
      *
      * @param n   dimensión 'n' de la matriz 'nxm'.
@@ -196,7 +184,7 @@ public class Main {
      * @param max valor máximo de los datos de la matriz.
      * @return Matriz de tipo entero.
      */
-    private static int[][] generarMatrizAleatoria(int n, int m, int min, int max) {
+    private static int[][] generarMatrizAleatoria(int n, int m, int min, int max, boolean excludeZero) {
         if (n <= 0 || m <= 0) {
             throw new IllegalArgumentException("""
                     Las dimensiones de la matriz no pueden ser negativas o cero.
@@ -213,10 +201,17 @@ public class Main {
         }
 
         int[][] matrizAleatoria = new int[n][m];
+        Random random = new Random();
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                matrizAleatoria[i][j] = (int) Math.floor((Math.random() * (max - min)) + min);
+                var aleatorio = random.nextInt(max - min) + min;
+
+                if (excludeZero && aleatorio == 0){
+                    --j;
+                    continue;
+                }
+                matrizAleatoria[i][j] = aleatorio;
             }
         }
 
@@ -231,7 +226,7 @@ public class Main {
      * @param max valor máximo de los datos de la matriz.
      * @return Optional con la matriz generada o vacío si el usuario cancela la operación.
      */
-    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max){
+    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max, boolean excludeZero){
         int[][] matriz = null;
         menu:
         do {
@@ -248,9 +243,9 @@ public class Main {
                 sc.nextLine();
 
                 switch (option) {
-                    case 1 -> matriz = generarMatrizAleatoria(n, m, min, max);
+                    case 1 -> matriz = generarMatrizAleatoria(n, m, min, max, excludeZero);
 
-                    case 2 -> matriz = obtenerDatos(n, m);
+                    case 2 -> matriz = obtenerDatos(n, m, excludeZero);
 
                     case 0 -> {
                         break menu;
@@ -291,7 +286,7 @@ public class Main {
                     m: %d
                     
                 """, n, m);
-        var obtenida = preguntarFormaDeLlenado(n, m, 5, 10);
+        var obtenida = preguntarFormaDeLlenado(n, m, 5, 10, false);
         obtenida.ifPresent(value -> {
             Matriz matriz = new Matriz(value);
             System.out.println(matriz.procesarSuma());
@@ -302,8 +297,6 @@ public class Main {
      * Método para ejecutar las operaciones aritméticas a la matriz según las especificaciones del problema.
      */
     private static void operacionesAritmeticas() {
-        clearScreen();
-
     }
 
     /**
