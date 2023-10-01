@@ -202,7 +202,7 @@ public class Matriz {
      *
      * @return Suma de los elementos de la diagonal principal de la matriz.
      */
-    public int sumDiagonal() {
+    public int getSumaDiagonalPrincipal() {
         int sum = 0;
         for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
@@ -220,7 +220,7 @@ public class Matriz {
      *
      * @return Diagonal principal de la matriz en forma de String.
      */
-    public String getPrincipalDiagonal() {
+    public String getDiagonalPrincipal() {
         StringBuilder str = new StringBuilder();
         str.append(llenarEncabezado()).append("\n");
 
@@ -242,4 +242,6 @@ public class Matriz {
 
         return str.toString();
     }
+
+
 }

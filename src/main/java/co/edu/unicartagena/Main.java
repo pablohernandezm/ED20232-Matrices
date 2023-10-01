@@ -368,7 +368,7 @@ public class Main {
                                                         
                                                         
                             La suma de los elementos de la diagonal principal es: %d.
-                            """, matriz, matriz.getPrincipalDiagonal(), matriz.sumDiagonal());
+                            """, matriz, matriz.getDiagonalPrincipal(), matriz.getSumaDiagonalPrincipal());
                     sc.nextLine();
 
                 }
