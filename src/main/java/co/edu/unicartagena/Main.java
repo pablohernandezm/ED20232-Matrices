@@ -30,7 +30,7 @@ public class Main {
                     0. Salir
                                         
                     Opción:""");
-            try{
+            try {
                 var option = sc.nextInt();
                 sc.nextLine();
 
@@ -39,11 +39,11 @@ public class Main {
 
                     case 1 -> sumaDeFilasYColumnas();
 
-                    case 2 -> operacionesAritmeticas();
+                    case 2 -> operaciones();
 
                     case 3 -> ordenarElementos();
 
-                    case 4 -> rotacionDeMatrices();
+                    case 4 -> rotarMatrices();
 
                     default -> System.out.println("Opción no válida");
                 }
@@ -51,11 +51,11 @@ public class Main {
                 System.out.println("\nPresione enter para continuar...");
                 sc.nextLine();
 
-            }catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 sc.nextLine();
 
                 if (!handleInputError("La opción ingresada no es válida.",
-                        "¿Desea volver al menú principal?")){
+                        "¿Desea volver al menú principal?")) {
                     System.exit(0);
                 }
             }
@@ -207,10 +207,15 @@ public class Main {
             for (int j = 0; j < m; j++) {
                 var aleatorio = random.nextInt(max - min) + min;
 
-                if (excludeZero && aleatorio == 0){
+                if (excludeZero && aleatorio == 0) {
                     --j;
                     continue;
                 }
+
+                if (random.nextBoolean()) {
+                    aleatorio *= -1;
+                }
+
                 matrizAleatoria[i][j] = aleatorio;
             }
         }
@@ -220,13 +225,14 @@ public class Main {
 
     /**
      * Método para preguntar al usuario si desea generar los datos aleatoriamente o ingresarlos manualmente.
-     * @param n dimension 'n' de la matriz 'nxm'.
-     * @param m dimension 'm' de la matriz 'nxm'.
+     *
+     * @param n   dimension 'n' de la matriz 'nxm'.
+     * @param m   dimension 'm' de la matriz 'nxm'.
      * @param min valor mínimo de los datos de la matriz.
      * @param max valor máximo de los datos de la matriz.
      * @return Optional con la matriz generada o vacío si el usuario cancela la operación.
      */
-    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max, boolean excludeZero){
+    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max, boolean excludeZero) {
         int[][] matriz = null;
         menu:
         do {
@@ -238,7 +244,7 @@ public class Main {
                     0. Cancelar operación.
                                     
                     Opción:""");
-            try{
+            try {
                 var option = sc.nextInt();
                 sc.nextLine();
 
@@ -253,11 +259,11 @@ public class Main {
 
                     default -> System.out.println("\nOpción no válida.\n\n");
                 }
-            } catch (InputMismatchException ignored){
+            } catch (InputMismatchException ignored) {
                 sc.nextLine();
 
                 if (!handleInputError("Opción no válida. Las opciones se seleccionan con valores numéricos.",
-                        "¿Desea volver a seleccionar una opción?")){
+                        "¿Desea volver a seleccionar una opción?")) {
                     break;
                 } else {
                     clearScreen();
@@ -296,7 +302,70 @@ public class Main {
     /**
      * Método para ejecutar las operaciones aritméticas a la matriz según las especificaciones del problema.
      */
-    private static void operacionesAritmeticas() {
+    private static void operaciones() {
+        clearScreen();
+        System.out.println("""
+                OPERACIONES ARITMÉTICAS
+                Ingrese el tamaño n de la matriz nxn.
+                n:""");
+
+        try {
+            var n = sc.nextInt();
+
+            var obtenida = preguntarFormaDeLlenado(n, n, -10, 10, true);
+
+            obtenida.ifPresent(Main::procesarOperaciones);
+
+        } catch (InputMismatchException ignored) {
+            if (handleInputError("El valor que ingresaste para n no es válido.",
+                    "¿Desea volver a ingresar el valor de n?")) {
+                operaciones();
+            } else {
+                System.exit(0);
+            }
+        }
+    }
+
+    private static void procesarOperaciones(int[][] value) {
+        clearScreen();
+        Matriz matriz = new Matriz(value);
+
+        System.out.println("""
+                OPERACIONES ARITMÉTICAS
+                1. Suma de los elementos de la diagonal principal.
+                2. Multiplicación de los elementos de la diagonal secundaria.
+                3. División entre la suma y la multiplicación anteriores.
+                0. Volver al menú principal.
+                                
+                Opción:""");
+
+        try {
+            var option = sc.nextInt();
+
+            switch (option) {
+                case 1 -> System.out.println(matriz + "\n1");
+                case 2 -> System.out.println(matriz + "\n2");
+                case 3 -> System.out.println(matriz + "\n3");
+                case 0 -> {
+                }
+                default -> {
+                    if (handleInputError("Opción no válida. Las opciones se seleccionan con valores numéricos entre el 0 y el 3.",
+                            "¿Desea volver a seleccionar una opción?")) {
+                        procesarOperaciones(value);
+                    } else {
+                        System.exit(0);
+                    }
+                }
+            }
+
+        } catch (InputMismatchException ignored) {
+            if (handleInputError("El valor que ingresaste para n no es válido.",
+                    "¿Desea volver a ingresar el valor de n?")) {
+                operaciones();
+            } else {
+                System.exit(0);
+            }
+        }
     }
 
     /**
@@ -309,7 +378,7 @@ public class Main {
     /**
      * Método para ejecutar la operación de rotación de matrices según las especificaciones del problema.
      */
-    private static void rotacionDeMatrices() {
+    private static void rotarMatrices() {
         //TODO: Implementar
     }
 

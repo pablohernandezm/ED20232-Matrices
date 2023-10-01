@@ -67,7 +67,7 @@ public class Matriz {
      */
     @Override
     public String toString() {
-        return handleToString(llenarEncabezado().toString()+"\n");
+        return handleToString(llenarEncabezado().toString() + "\n");
     }
 
     private String handleToString(String header) {
