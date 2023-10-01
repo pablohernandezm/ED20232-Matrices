@@ -16,8 +16,8 @@ public class Matriz {
     /**
      * Constructor de la clase
      *
-     * @param matriz Matriz cuadrada de tipo T.
-     * @throws IllegalArgumentException Si la matriz no es cuadrada o está vacía.
+     * @param matriz Matriz de tipo entero.
+     * @throws IllegalArgumentException Si la matriz está vacía.
      */
     public Matriz(int[][] matriz) throws IllegalArgumentException {
         if (matriz.length == 0) {
@@ -28,46 +28,13 @@ public class Matriz {
     }
 
     /**
-     * Método para verificar si la matriz es cuadrada.
-     *
-     * @return True si la matriz es cuadrada, false en caso contrario.
-     */
-    public boolean esCuadrada() {
-        for (int[] row : matriz) {
-            if (matriz.length != row.length) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Método para obtener la matriz.
-     *
-     * @return Matriz de tipo T.
-     */
-    public int[][] getMatriz() {
-        return matriz;
-    }
-
-    /**
-     * Método para obtener la dimensión de la matriz.
-     *
-     * @return Dimensión de la matriz.
-     */
-    public int getDimension() {
-        return this.matriz.length;
-    }
-
-    /**
      * Método recibir el string de la matriz.
      *
      * @return matriz en forma de String.
      */
     @Override
     public String toString() {
-        return handleToString(llenarEncabezado().toString() + "\n");
+        return handleToString(llenarEncabezado() + "\n");
     }
 
     private String handleToString(String header) {
@@ -94,7 +61,6 @@ public class Matriz {
     private String handleToString(String header, String footer) {
         return handleToString(header) + footer;
     }
-
 
     /**
      * Método para llenar una determinada fila de la matriz, con el formato adecuado y sus índices.
