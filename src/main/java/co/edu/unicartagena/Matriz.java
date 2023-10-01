@@ -7,17 +7,17 @@ public class Matriz {
     /**
      * Espacio entre los datos de la matriz
      */
-    private static final int SPACING = 8;
+    protected static final int SPACING = 8;
 
     /**
      * Espacio entre los datos de la matriz para encabezados especiales
      */
-    private static final int specialSpacing = 14;
+    protected static final int specialSpacing = 14;
 
     /**
      * Matriz de datos
      */
-    private final int[][] matriz;
+    protected final int[][] matriz;
 
 
     /**
@@ -108,7 +108,7 @@ public class Matriz {
      *
      * @return Encabezado de la matriz en forma de StringBuilder.
      */
-    private StringBuilder llenarEncabezado() {
+    protected StringBuilder llenarEncabezado() {
         // Llenar el encabezado
         var headerFormat = "Filas/Columnas %s";
         var header = new StringBuilder();
@@ -130,7 +130,7 @@ public class Matriz {
      * @param adicionalFormat Formato del parámetro adicional.
      * @return Encabezado de la matriz en forma de StringBuilder.
      */
-    private StringBuilder llenarEncabezado(String adicional, String adicionalFormat) {
+    protected StringBuilder llenarEncabezado(String adicional, String adicionalFormat) {
         StringBuilder header = llenarEncabezado();
 
         header.append(" ");
@@ -196,52 +196,5 @@ public class Matriz {
 
         return rowSum.toString();
     }
-
-    /**
-     * Obtiene la suma de los elementos de la diagonal principal de la matriz.
-     *
-     * @return Suma de los elementos de la diagonal principal de la matriz.
-     */
-    public int getSumaDiagonalPrincipal() {
-        int sum = 0;
-        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
-                if (i == j) {
-                    sum += matriz[i][j];
-                }
-            }
-        }
-
-        return sum;
-    }
-
-    /**
-     * Método para obtener la diagonal principal de la matriz en forma de String.
-     *
-     * @return Diagonal principal de la matriz en forma de String.
-     */
-    public String getDiagonalPrincipal() {
-        StringBuilder str = new StringBuilder();
-        str.append(llenarEncabezado()).append("\n");
-
-        for (int i = 0; i < Objects.requireNonNull(matriz).length; i++) {
-            str.append(String.format("%" + specialSpacing + "d ", i));
-
-            for (int j = 0; j < matriz[i].length; j++) {
-                var datoFormat = " %" + SPACING + "s ";
-
-                if (i != j) {
-                    str.append(String.format(datoFormat, 0));
-                } else {
-                    str.append(String.format(datoFormat, matriz[i][j]));
-                }
-            }
-
-            str.append("\n");
-        }
-
-        return str.toString();
-    }
-
 
 }

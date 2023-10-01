@@ -25,8 +25,8 @@ Diseñe un algoritmo que cumpla con las siguientes características:
 - La matriz debe contener únicamente números enteros **positivos** o **negativos**, el número ``0`` no está incluido. ✅
 - Se debe imprimir: 
   - La suma de los elementos de la diagonal principal. ✅
-  - La multiplicación de los elementos de la diagonal secundaria. ❌
-  - La división entre la suma y la multiplicación anteriores. ❌
+  - La multiplicación de los elementos de la diagonal secundaria. ✅
+  - La división entre la suma y la multiplicación anteriores. ✅
 
 ## Ordenando los elementos de una matriz
 Dada una matriz cuadrada ``n x n`` se debe evaluar una solución de acuerdo a las siguientes restricciones:

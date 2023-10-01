@@ -306,6 +306,11 @@ public class Main {
         cleanConsole();
         System.out.print("""
                 OPERACIONES ARITMÉTICAS
+                Al ingresar los datos de la matriz, se realizarán las siguientes operaciones:
+                    1. Suma de los elementos de la diagonal principal.
+                    2. Multiplicación de los elementos de la diagonal secundaria.
+                    3. División entre la suma y la multiplicación anteriores.
+                                
                 Ingrese el tamaño n de la matriz nxn.
                 n:""");
 
@@ -334,67 +339,32 @@ public class Main {
      */
     private static void procesarOperaciones(int[][] value) {
         cleanConsole();
-        Matriz matriz = new Matriz(value);
+        MatrizCuadrada matriz = new MatrizCuadrada(value);
+
         System.out.printf("""
-                MATRIZ GENERADA
-                %s
-                                
-                                
-                """, matriz);
-
-        System.out.print("""
-                OPERACIONES ARITMÉTICAS
-                1. Suma de los elementos de la diagonal principal.
-                2. Multiplicación de los elementos de la diagonal secundaria.
-                3. División entre la suma y la multiplicación anteriores.
-                0. Volver al menú principal.
-                                
-                Opción:""");
-
-        try {
-            var option = sc.nextInt();
-            sc.nextLine();
-
-            cleanConsole();
-            switch (option) {
-                case 1 -> {
-                    System.out.printf("""
-                            MATRIZ GENERADA
-                            %s
-                                                        
-                                                        
-                            DIAGONAL DE LA MATRIZ
-                            %s
-                                                        
-                                                        
-                            La suma de los elementos de la diagonal principal es: %d.
-                            """, matriz, matriz.getDiagonalPrincipal(), matriz.getSumaDiagonalPrincipal());
-                    sc.nextLine();
-
-                }
-
-                case 2 -> System.out.println(matriz + "\n2");
-                case 3 -> System.out.println(matriz + "\n3");
-                case 0 -> {
-                }
-                default -> {
-                    if (handleInputError("Opción no válida. Las opciones se seleccionan con valores numéricos entre el 0 y el 3.",
-                            "¿Desea volver a seleccionar una opción?")) {
-                        procesarOperaciones(value);
-                    } else {
-                        System.exit(0);
-                    }
-                }
-            }
-
-        } catch (InputMismatchException ignored) {
-            if (handleInputError("El valor que ingresaste para n no es válido.",
-                    "¿Desea volver a ingresar el valor de n?")) {
-                operaciones();
-            } else {
-                System.exit(0);
-            }
-        }
+                        MATRIZ GENERADA
+                        %s
+                                        
+                                        
+                        DIAGONAL PRINCIPAL
+                        %s
+                                        
+                        Suma de los elementos de la diagonal principal: %d.
+                                        
+                                        
+                        DIAGONAL SECUNDARIA
+                        %s
+                                        
+                        Producto de los elementos de la diagonal secundaria: %d.
+                                        
+                        DIVISIÓN ENTRE LA SUMA Y EL PRODUCTO DE LAS DIAGONALES
+                        %s = %.4f
+                        """,
+                matriz,
+                matriz.getDiagonalPrincipal(), matriz.getSumaDiagonalPrincipal(),
+                matriz.getDiagonalSecundaria(), matriz.getProductoDiagonalSecundaria(),
+                matriz.getSumaDiagonalPrincipal() + "/" + matriz.getProductoDiagonalSecundaria(),
+                matriz.getSumaDiagonalPrincipal() / (double) matriz.getProductoDiagonalSecundaria());
     }
 
     /**
