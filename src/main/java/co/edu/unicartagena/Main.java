@@ -1,6 +1,7 @@
 package co.edu.unicartagena;
 
 import java.util.InputMismatchException;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -223,24 +224,15 @@ public class Main {
     }
 
     /**
-     * Método para ejecutar la operación de suma de filas y columnas según las especificaciones del problema.
+     * Método para preguntar al usuario si desea generar los datos aleatoriamente o ingresarlos manualmente.
+     * @param n dimension 'n' de la matriz 'nxm'.
+     * @param m dimension 'm' de la matriz 'nxm'.
+     * @param min valor mínimo de los datos de la matriz.
+     * @param max valor máximo de los datos de la matriz.
+     * @return Optional con la matriz generada o vacío si el usuario cancela la operación.
      */
-    private static void sumaDeFilasYColumnas() {
-        clearScreen();
-        Matriz matriz;
-
-        // Valores aleatorios generados entre 5 y 10 para 'n' y 'm'.
-        int n = (int) Math.floor(Math.random() * 5 + 5);
-        int m = (int) Math.floor(Math.random() * 5 + 5);
-
-        System.out.printf("""
-                SUMA DE FILAS Y COLUMNAS
-                Dimensiones generadas:
-                    n: %d
-                    m: %d
-                    
-                """, n, m);
-
+    private static Optional<int[][]> preguntarFormaDeLlenado(int n, int m, int min, int max){
+        int[][] matriz = null;
         menu:
         do {
             System.out.print("""
@@ -256,25 +248,12 @@ public class Main {
                 sc.nextLine();
 
                 switch (option) {
-                    case 1 -> {
-                        matriz = new Matriz(generarMatrizAleatoria(n, m, 5, 10));
-                        System.out.println(matriz.procesarSuma());
-                        break menu;
-                    }
+                    case 1 -> matriz = generarMatrizAleatoria(n, m, min, max);
 
-                    case 2 -> {
-                        var base = obtenerDatos(n, m);
-                        if (base != null) {
-                            matriz = new Matriz(base);
-                            System.out.println(matriz.procesarSuma());
-                            break menu;
-                        }
-
-                        return;
-                    }
+                    case 2 -> matriz = obtenerDatos(n, m);
 
                     case 0 -> {
-                        return;
+                        break menu;
                     }
 
                     default -> System.out.println("\nOpción no válida.\n\n");
@@ -290,13 +269,40 @@ public class Main {
                 }
             }
 
-        } while (true);
+        } while (matriz == null);
+
+        return Optional.ofNullable(matriz);
+    }
+
+    /**
+     * Método para ejecutar la operación de suma de filas y columnas según las especificaciones del problema.
+     */
+    private static void sumaDeFilasYColumnas() {
+        clearScreen();
+
+        // Valores aleatorios generados entre 5 y 10 para 'n' y 'm'.
+        int n = (int) Math.floor(Math.random() * 5 + 5);
+        int m = (int) Math.floor(Math.random() * 5 + 5);
+
+        System.out.printf("""
+                SUMA DE FILAS Y COLUMNAS
+                Dimensiones generadas:
+                    n: %d
+                    m: %d
+                    
+                """, n, m);
+        var obtenida = preguntarFormaDeLlenado(n, m, 5, 10);
+        obtenida.ifPresent(value -> {
+            Matriz matriz = new Matriz(value);
+            System.out.println(matriz.procesarSuma());
+        });
     }
 
     /**
      * Método para ejecutar las operaciones aritméticas a la matriz según las especificaciones del problema.
      */
     private static void operacionesAritmeticas() {
+        clearScreen();
 
     }
 
