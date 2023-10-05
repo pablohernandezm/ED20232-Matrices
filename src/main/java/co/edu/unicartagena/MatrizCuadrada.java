@@ -105,11 +105,109 @@ public class MatrizCuadrada extends Matriz {
 
     /**
      * Método para reemplazar los valores de una matriz de acuerdo a una lista de punteros.
+     *
      * @param pointers Lista de punteros.
      */
-    public void replace(Pointer[] pointers){
+    public void replace(Pointer[] pointers) {
         for (Pointer pointer : pointers) {
             matriz[pointer.getX()][pointer.getY()] = pointer.getValue();
+        }
+    }
+
+    /**
+     * Método para rotar un anillo de la matriz.
+     * @param anillo Anillo a rotar.
+     * @param direction Dirección de la rotación.
+     * @param grados Grados de la rotación.
+     */
+    public void rotarAnillo(int anillo, String direction, int grados) {
+        var n = matriz.length;
+
+        // Guardar las partes superior, derecha, abajo e izquierda del anillo
+        int[] top = new int[n - 2 * anillo + 2];
+        int[] right = new int[n - 2 * anillo + 2];
+        int[] bottom = new int[n - 2 * anillo + 2];
+        int[] left = new int[n - 2 * anillo + 2];
+
+        int idx = 0;
+        for (int i = anillo - 1; i < n - anillo + 1; i++) {
+            top[idx] = matriz[anillo - 1][i];
+            right[idx] = matriz[i][n - anillo];
+            bottom[idx] = matriz[n - anillo][n - i - 1];
+            left[idx] = matriz[n - i - 1][anillo - 1];
+            idx++;
+        }
+
+        if (direction.equalsIgnoreCase("derecha")) {
+            switch (grados) {
+                case 90: // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matriz[anillo - 1][i] = left[idx];
+                        matriz[i][n - anillo] = top[idx];
+                        matriz[n - anillo][n - i - 1] = right[idx];
+                        matriz[n - i - 1][anillo - 1] = bottom[idx];
+                        idx++;
+                    }
+                    break;
+                case 180:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matriz[anillo - 1][i] = bottom[idx];
+                        matriz[i][n - anillo] = left[idx];
+                        matriz[n - anillo][n - i - 1] = top[idx];
+                        matriz[n - i - 1][anillo - 1] = right[idx];
+                        idx++;
+                    }
+                    break;
+                case 270:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matriz[anillo - 1][i] = right[idx];
+                        matriz[i][n - anillo] = bottom[idx];
+                        matriz[n - anillo][n - i - 1] = left[idx];
+                        matriz[n - i - 1][anillo - 1] = top[idx];
+                        idx++;
+                    }
+            }
+        }
+
+        if (direction.equalsIgnoreCase("izquierda")) {
+            switch (grados) {
+                case 90: // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matriz[anillo - 1][i] = right[idx];
+                        matriz[i][n - anillo] = bottom[idx];
+                        matriz[n - anillo][n - i - 1] = left[idx];
+                        matriz[n - i - 1][anillo - 1] = top[idx];
+                        idx++;
+                    }
+                    break;
+                case 180:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matriz[anillo - 1][i] = bottom[idx];
+                        matriz[i][n - anillo] = left[idx];
+                        matriz[n - anillo][n - i - 1] = top[idx];
+                        matriz[n - i - 1][anillo - 1] = right[idx];
+                        idx++;
+                    }
+                    break;
+                case 270:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matriz[anillo - 1][i] = left[idx];
+                        matriz[i][n - anillo] = top[idx];
+                        matriz[n - anillo][n - i - 1] = right[idx];
+                        matriz[n - i - 1][anillo - 1] = bottom[idx];
+                        idx++;
+                    }
+            }
         }
     }
 

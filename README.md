@@ -45,9 +45,9 @@ Dada una matriz cuadrada ``n x n`` se debe evaluar una solución de acuerdo a la
 
 ## Rotación de matrices
 Diseñe un algoritmo que permita la creación de una matriz ``n x n`` que cumpla con las siguientes restricciones:
-- El usuario debe ingresar el tamaño de la matriz. ❌
-- El tamaño de la matriz debe ser mayor o igual a 2 y menor o igual a 10. ❌
-- La matriz debe llenarse con valores aleatorios del 5 al 25. ❌
+- El usuario debe ingresar el tamaño de la matriz. ✅
+- El tamaño de la matriz debe ser mayor o igual a 2 y menor o igual a 10. ✅
+- La matriz debe llenarse con valores aleatorios del 5 al 25. ✅
 
 Note que al organizar la matriz cuadrada se ve un patrón de anillos únicos en la matriz (``x``, ``y``, ``z``).
 
@@ -62,8 +62,8 @@ Note que al organizar la matriz cuadrada se ve un patrón de anillos únicos en 
 |     |   |   |   |   |   |   |     |
 
 Entonces, el algoritmo debe:
-- Preguntar al usuario qué anillo quiere rotar (1...5). ❌
-- Preguntar al usuario en qué dirección quiere rotar el anillo (izquierda o derecha). ❌
-- Preguntar al usuario a cuántos grados quiere rotar el anillo (90, 180, 270). ❌
-- Por cada rotación imprimir en pantalla la matriz resultante. ❌
-- Describir matemáticamente la complejidad de la solución. ❌
+- Preguntar al usuario qué anillo quiere rotar (1...5). ✅
+- Preguntar al usuario en qué dirección quiere rotar el anillo (izquierda o derecha). ✅
+- Preguntar al usuario a cuántos grados quiere rotar el anillo (90, 180, 270). ✅
+- Por cada rotación imprimir en pantalla la matriz resultante. ✅
+  - Describir matemáticamente la complejidad de la solución. ✅
