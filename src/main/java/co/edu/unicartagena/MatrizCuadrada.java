@@ -1,5 +1,7 @@
 package co.edu.unicartagena;
 
+import co.edu.unicartagena.Extra.Pointer;
+
 import java.util.Objects;
 
 public class MatrizCuadrada extends Matriz {
@@ -101,5 +103,14 @@ public class MatrizCuadrada extends Matriz {
         return ds.toString();
     }
 
+    /**
+     * Método para reemplazar los valores de una matriz de acuerdo a una lista de punteros.
+     * @param pointers Lista de punteros.
+     */
+    public void replace(Pointer[] pointers){
+        for (Pointer pointer : pointers) {
+            matriz[pointer.getX()][pointer.getY()] = pointer.getValue();
+        }
+    }
 
 }

@@ -1,5 +1,7 @@
 package co.edu.unicartagena;
 
+import co.edu.unicartagena.Extra.Pointer;
+
 import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Random;
@@ -36,23 +38,17 @@ public class Main {
                 sc.nextLine();
 
                 switch (option) {
-                    case 0 ->
-                        System.exit(0);
+                    case 0 -> System.exit(0);
 
-                    case 1 ->
-                        sumaDeFilasYColumnas();
+                    case 1 -> sumaDeFilasYColumnas();
 
-                    case 2 ->
-                        operaciones();
+                    case 2 -> operaciones();
 
-                    case 3 ->
-                        ordenarElementos();
+                    case 3 -> ordenarElementos();
 
-                    case 4 ->
-                        rotarMatrices();
+                    case 4 -> rotarMatrices();
 
-                    default ->
-                        System.out.println("Opción no válida");
+                    default -> System.out.println("Opción no válida");
                 }
 
                 System.out.println("\nPresione enter para continuar...");
@@ -187,8 +183,8 @@ public class Main {
     /**
      * Método para generar una matriz aleatoria.
      *
-     * @param n dimensión 'n' de la matriz 'nxm'.
-     * @param m dimensión 'm' de la matriz 'nxm'.
+     * @param n   dimensión 'n' de la matriz 'nxm'.
+     * @param m   dimensión 'm' de la matriz 'nxm'.
      * @param min valor mínimo de los datos de la matriz.
      * @param max valor máximo de los datos de la matriz.
      * @return Matriz de tipo entero.
@@ -236,8 +232,8 @@ public class Main {
      * Método para preguntar al usuario si desea generar los datos
      * aleatoriamente o ingresarlos manualmente.
      *
-     * @param n dimension 'n' de la matriz 'nxm'.
-     * @param m dimension 'm' de la matriz 'nxm'.
+     * @param n   dimension 'n' de la matriz 'nxm'.
+     * @param m   dimension 'm' de la matriz 'nxm'.
      * @param min valor mínimo de los datos de la matriz.
      * @param max valor máximo de los datos de la matriz.
      * @return Optional con la matriz generada o vacío si el usuario cancela la
@@ -260,18 +256,15 @@ public class Main {
                 sc.nextLine();
 
                 switch (option) {
-                    case 1 ->
-                        matriz = generarMatrizAleatoria(n, m, min, max, excludeZero, includeNegatives);
+                    case 1 -> matriz = generarMatrizAleatoria(n, m, min, max, excludeZero, includeNegatives);
 
-                    case 2 ->
-                        matriz = obtenerDatos(n, m, excludeZero);
+                    case 2 -> matriz = obtenerDatos(n, m, excludeZero);
 
                     case 0 -> {
                         break menu;
                     }
 
-                    default ->
-                        System.out.println("\nOpción no válida.\n\n");
+                    default -> System.out.println("\nOpción no válida.\n\n");
                 }
             } catch (InputMismatchException ignored) {
                 sc.nextLine();
@@ -342,8 +335,6 @@ public class Main {
             if (handleInputError("El valor que ingresaste para n no es válido.",
                     "¿Desea volver a ingresar el valor de n?")) {
                 operaciones();
-            } else {
-                System.exit(0);
             }
         }
     }
@@ -389,312 +380,124 @@ public class Main {
      * según las especificaciones del problema.
      */
     private static void ordenarElementos() {
-        //TODO: Implementar
+        cleanConsole();
 
-        //generalidades
-        System.out.println("ingrese el tamaño de la matriz cuadrada:\n");
-        int Size_Matriz = sc.nextInt();
+        try {
+            System.out.print("""
+                    ORDENANDO LOS ELEMENTOS DE UNA MATRIZ
+                    Luego de generar los elementos de la matriz nxn se imprimirán:
+                        1. La matriz original.
+                        2. La matriz con los elementos por debajo de la diagonal ordenados de menor a mayor.
+                        3. La matriz con los elementos por encima de la diagonal ordenados de mayor a menor.
+                                                                       
+                    Ingrese el tamaño n de la matriz nxn.
+                    n:""");
+            int n = sc.nextInt();
+            sc.nextLine();
 
-        int matriz[][];
+            int[][] matriz;
 
-        //se genera la matriz
-        matriz = generarMatrizAleatoria(Size_Matriz, Size_Matriz, 25, 75, true, false);
+            // se genera la matriz
+            matriz = generarMatrizAleatoria(n, n, 25, 75, false, false);
 
-//----------------------------------------------------------------------------------------------------
-//apartir de aqui se trabajara en exclusiva con la diagonal principal
-        //creacion de vectores fugaces
-        int VectorSuperiorDP[] = new int[100];
-        int VectorInferiorDP[] = new int[100];
-
-        //inician en 0 con 100 posiciones
-        for (int i = 0; i < 100; i++) {
-            VectorSuperiorDP[i] = 0;
-            VectorInferiorDP[i] = 0;
-
-        }
-
-        //iteradores para vectores fugaces
-        int countSupDP = 0;
-        int countInfDP = 0;
-
-
-        /*este for tiene varias funciones
-         *1. mostrar la matriz generada
-         *2.llenar el vector momentaneo referente a los elementos arriba de la diagonal principal
-         *3.llenar el vector momentaneo referente a los elementos abajo de la diagonal principal
-         */
-        System.out.println("matriz generada: ");
-
-        for (int i = 0; i <= Size_Matriz - 1; i++) {
-            for (int j = 0; j <= Size_Matriz - 1; j++) {
-
-                //llena vector superior de diagonal principal
-                if (j > i) {
-
-                    VectorSuperiorDP[countSupDP] = matriz[i][j];
-                    countSupDP++;
-                }
-
-                //llena vector inferior de diagonal principal
-                if (j < i) {
-
-                    VectorInferiorDP[countInfDP] = matriz[i][j];
-                    countInfDP++;
-                }
-
-                //muestra la matriz generada
-                System.out.print("[" + matriz[i][j] + "]");
-            }
-            System.out.println();
-        }
-
-        System.out.println("\n");
-
-        int copia1[] = new int[countSupDP + 1];
-        int copia2[] = new int[countInfDP + 1];
-
-        for (int i = 0; i <= countSupDP - 1; i++) {
-            copia1[i] = VectorSuperiorDP[i];
-        }
-
-        for (int i = 0; i <= countInfDP - 1; i++) {
-            copia2[i] = VectorInferiorDP[i];
-        }
-
-        ordenar_menor_A_mayor(copia2);
-        ordenar_mayor_a_menor(copia1);
-
-        System.out.println("arriba de la diagonal principal ordenada de mayor a menor:");
-
-        for (int i = 0; i <= copia1.length - 1; i++) {
-            if (copia1[i] != 0) {
-                System.out.print("[" + copia1[i] + "]");
-            }
-        }
-        System.out.println();
-
-        System.out.println("abajo de la diagonal principal ordenada de menor a mayor:");
-        for (int i = 0; i <= copia2.length - 1; i++) {
-            if (copia2[i] != 0) {
-                System.out.print("[" + copia2[i] + "]");
-            }
-        }
-
-        System.out.println("\n");
-
-        int contar1 = 0;
-        int contar2 = 1;
-        int matriz_dp[][] = new int[Size_Matriz][Size_Matriz];
-        System.out.println("matriz resultante generada segun requisitos previos con respecto a la diagonal principal:");
-
-        for (int i = 0; i <= Size_Matriz - 1; i++) {
-            for (int j = 0; j <= Size_Matriz - 1; j++) {
-
-                if (j == i) {
-                    matriz_dp[i][j] = matriz[i][j];
-                }
-                if (j > i && copia1[contar1] != 0) {
-
-                    matriz_dp[i][j] = copia1[contar1];
-                    contar1++;
-                }
-                if (j < i && copia2[contar2] != 0) {
-
-                    matriz_dp[i][j] = copia2[contar2];
-                    contar2++;
-                }
-                if(j==i){
-                   System.out.print("(" + matriz_dp[i][j] + ")"); 
-                }else{
-                System.out.print("[" + matriz_dp[i][j] + "]");
-                }
-            }
-            System.out.println();
-        }
-
-        //----------------------------------------------------------------------------------------------------
-        //apartir de aqui se trabajara con la diagonal secundaria
-        int matriz_Espejo[][] = new int[Size_Matriz][Size_Matriz];
-
-        for (int i = 0; i <= Size_Matriz - 1; i++) {
-
-            int contador_inverso = Size_Matriz - 1;
-
-            for (int j = 0; j <= Size_Matriz - 1; j++) {
-
-                matriz_Espejo[i][j] = matriz[i][contador_inverso];
-                contador_inverso--;
-                
+            // Número de elementos arriba o abajo de la diagonal
+            int nout = 0;
+            for (int i = 0; i < n; i++) {
+                nout += i;
             }
 
-        }
-
-        //creada la matriz espejo, se hace lo mismo que con la diagonal principal
-        //creacion de vectores fugaces
-        int VectorSuperiorDS[] = new int[100];
-        int VectorInferiorDS[] = new int[100];
-
-        //inician en 0 con 100 posiciones
-        for (int i = 0; i < 100; i++) {
-            VectorSuperiorDS[i] = 0;
-            VectorInferiorDS[i] = 0;
-
-        }
-
-        //iteradores para vectores fugaces
-        int countSupDS = 0;
-        int countInfDS = 0;
+            // Vectores de elementos no diagonales
+            Pointer[] vectorSuperiorDP = new Pointer[nout];
+            Pointer[] vectorInferiorDP = new Pointer[nout];
 
 
-        /*este for tiene 2 funciones
-         *1.llenar el vector momentaneo referente a los elementos arriba de la diagonal secundaria
-         *2.llenar el vector momentaneo referente a los elementos abajo de la diagonal secundaria
-         */
-        for (int i = 0; i <= Size_Matriz - 1; i++) {
-            for (int j = 0; j <= Size_Matriz - 1; j++) {
+            // Llenar los vectores
+            int countSupDP = 0;
+            int countInfDP = 0;
+            for (int i = 0; i <= n - 1; i++) {
+                for (int j = 0; j <= n - 1; j++) {
+                    if (j > i) {
+                        vectorSuperiorDP[countSupDP] = new Pointer(matriz[i][j], i, j);
+                        countSupDP++;
+                    }
 
-                //llena vector superior de diagonal secundaria
-                if (j > i) {
-
-                    VectorSuperiorDS[countSupDS] = matriz_Espejo[i][j];
-                    countSupDS++;
-                }
-
-                //llena vector inferior de diagonal principal
-                if (j < i) {
-
-                    VectorInferiorDS[countInfDS] = matriz_Espejo[i][j];
-                    countInfDS++;
-                }
-
-            }
-        }
-
-        System.out.println("\n");
-
-        int copia3[] = new int[countSupDS + 1];
-        int copia4[] = new int[countInfDS + 1];
-
-        for (int i = 0; i <= countSupDS - 1; i++) {
-            copia3[i] = VectorSuperiorDS[i];
-        }
-
-        for (int i = 0; i <= countInfDS - 1; i++) {
-            copia4[i] = VectorInferiorDS[i];
-        }
-
-        ordenar_menor_A_mayor(copia4);
-        ordenar_mayor_a_menor(copia3);
-
-        System.out.println("arriba de la diagonal secundaria ordenada de mayor a menor:");
-        for (int i = 0; i <= copia3.length - 1; i++) {
-            if (copia3[i] != 0) {
-                System.out.print("[" + copia3[i] + "]");
-            }
-        }
-        System.out.println();
-
-        System.out.println("abajo de la diagonal secundaria ordenada de menor a mayor:");
-        for (int i = 0; i <= copia4.length - 1; i++) {
-            if (copia4[i] != 0) {
-                System.out.print("[" + copia4[i] + "]");
-            }
-        }
-
-        System.out.println("\n");
-
-        int contar3 = 0;
-        int contar4 = 1;
-        int matriz_ds[][] = new int[Size_Matriz][Size_Matriz];
-
-        System.out.println("matriz resultante generada segun requisitos previos con respecto a la diagonal secundaria:");
-        for (int i = 0; i <= Size_Matriz - 1; i++) {
-            for (int j = 0; j <= Size_Matriz - 1; j++) {
- 
-                if (j > i && copia3[contar3] != 0) {
-
-                    matriz_ds[i][j] = copia3[contar3];
-                    contar3++;
-                }else if (j < i && copia4[contar4] != 0) {
-
-                    matriz_ds[i][j] = copia4[contar4];
-                    contar4++;
-                }else if(j == i){
-                    matriz_ds[i][j] = matriz_Espejo[i][j];
-                }
-  
-            }           
-        }
-        
-        int matriz_Espejo_del_espejo[][] = new int[Size_Matriz][Size_Matriz];
-
-        for (int i = 0; i <= Size_Matriz - 1; i++) {
-
-            int contador_inverso = Size_Matriz - 1;
-
-            for (int j = 0; j <= Size_Matriz - 1; j++) {
-
-                matriz_Espejo_del_espejo[i][j] = matriz_ds[i][contador_inverso];
-                contador_inverso--;
-                System.out.print("["+matriz_Espejo_del_espejo[i][j] + "]");
-            }
-            System.out.println();
-        }
-
-    }
-
-    /*
-     *metodo de ordenamiento de menor a mayor
-     */
-    public static void ordenar_menor_A_mayor(int[] arr) {
-        int n = arr.length;
-        boolean intercambiado;
-
-        for (int i = 0; i < n - 1; i++) {
-            intercambiado = false;
-
-            // Últimos i elementos ya están ordenados, así que no es necesario revisarlos
-            for (int j = 0; j < n - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    // Intercambiar arr[j] y arr[j+1]
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                    intercambiado = true;
+                    if (j < i) {
+                        vectorInferiorDP[countInfDP] = new Pointer(matriz[i][j], i, j);
+                        countInfDP++;
+                    }
                 }
             }
 
-            // Si no hubo intercambios en esta pasada, el arreglo ya está ordenado
-            if (!intercambiado) {
-                break;
+            // Ordenar los vectores
+            ordenarAscendente(vectorInferiorDP);
+            ordenarDescendiente(vectorSuperiorDP);
+
+            // Matriz Original
+            MatrizCuadrada original = new MatrizCuadrada(matriz);
+
+            System.out.printf("""
+                    MATRIZ ORIGINAL
+                                        
+                    %s
+                                        
+                    """, original);
+
+            original.replace(vectorInferiorDP);
+            System.out.printf("""
+                    ELEMENTOS POR DEBAJO DE LA DIAGONAL ORDENADOS DE MENOR A MAYOR
+                                        
+                    %s
+                                        
+                    """, original);
+
+            original.replace(vectorSuperiorDP);
+            System.out.printf("""
+                    ELEMENTOS POR ARRIBA DE LA DIAGONAL ORDENADOS DE MAYOR A MENOR
+                                        
+                    %s
+                                        
+                    """, original);
+
+        } catch (InputMismatchException ignored) {
+            if (handleInputError("El valor que ingresaste para el tamaño de la matriz no es válido.",
+                    "¿Desea volver a ingresar el valor de n?")) {
+                ordenarElementos();
             }
         }
     }
 
-    /*
-     *metodo de ordenamiento de mayor a menor
+    /**
+     * Método para ordenar los elementos de un vector de menor a mayor
+     *
+     * @param pointers vector de tipo Pointer.
      */
-    public static void ordenar_mayor_a_menor(int[] arr) {
-        int n = arr.length;
-        boolean intercambiado;
+    public static void ordenarAscendente(Pointer[] pointers) {
+        for (int i = 0; i < pointers.length; i++) {
+            for (int j = 0; j < pointers.length - 1; j++) {
+                if (pointers[j].getValue() > pointers[j + 1].getValue()) {
+                    int temp = pointers[j].getValue();
 
-        for (int i = 0; i < n - 1; i++) {
-            intercambiado = false;
-
-            // Últimos i elementos ya están ordenados, así que no es necesario revisarlos
-            for (int j = 0; j < n - i - 1; j++) {
-                if (arr[j] < arr[j + 1]) {
-                    // Intercambiar arr[j] y arr[j+1] para orden descendente
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                    intercambiado = true;
+                    pointers[j].setValue(pointers[j + 1].getValue());
+                    pointers[j + 1].setValue(temp);
                 }
             }
+        }
+    }
 
-            // Si no hubo intercambios en esta pasada, el arreglo ya está ordenado
-            if (!intercambiado) {
-                break;
+    /**
+     * Método para ordenar los elementos de un vector de mayor a menor
+     *
+     * @param pointers vector de tipo Pointer.
+     */
+    public static void ordenarDescendiente(Pointer[] pointers) {
+        for (int i = 0; i < pointers.length; i++) {
+            for (int j = 0; j < pointers.length - 1; j++) {
+                if (pointers[j].getValue() < pointers[j + 1].getValue()) {
+                    int temp = pointers[j].getValue();
+
+                    pointers[j].setValue(pointers[j + 1].getValue());
+                    pointers[j + 1].setValue(temp);
+                }
             }
         }
     }
