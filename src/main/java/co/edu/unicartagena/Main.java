@@ -372,6 +372,20 @@ public class Main {
      */
     private static void ordenarElementos() {
         //TODO: Implementar
+        System.out.println("ingrese el tamaño de la matriz cuadrada:\n");
+        int Size_Matriz = sc.nextInt();
+        int matriz[][];
+        
+        matriz = generarMatrizAleatoria(Size_Matriz, Size_Matriz, 25, 75, true, false);
+        
+        System.out.println("matriz generada: ");
+        for (int i = 0; i <= Size_Matriz-1; i++) {
+            for (int j = 0; j <= Size_Matriz-1; j++) {
+                System.out.print("["+matriz[i][j]+"]");
+                
+            }
+            System.out.println();
+        }
     }
 
     /**
