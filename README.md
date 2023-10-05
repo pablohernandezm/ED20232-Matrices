@@ -4,6 +4,12 @@
 - [Jhoy Luis Castro Casanova](https://www.linkedin.com/in/jhoy-luis-castro-casanova-061142249/)
 - [Gabriel David Lara Montiel](https://www.linkedin.com/in/gabriel-david-lara-montiel-367933288/)
 
+## Entorno de desarrollo
+El proyecto fue realizado utilizando en conjunto las herramientas:
+- Apache Netbeans IDE 19.0.0
+- IntelliJ IDEA 2020.3.2 (Ultimate Edition)
+
+Además de la versión 21 de Java (openjdk version "21", 2023-09-19 LTS).
 
 ## Suma de filas y columnas
 Diseñe un algoritmo que lea una matriz de ```n x m``` (n y m generados aleatoriamente en el rango de 5 y 10) y calcule la suma de los elementos de cada fila y cada columna. Por ejemplo:
