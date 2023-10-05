@@ -29,9 +29,10 @@ public class Pointer {
 
     /**
      * Constructor de la clase.
+     *
      * @param value Valor en la posición del puntero.
-     * @param x Posición en 'x' del puntero.
-     * @param y Posición en 'y' del puntero.
+     * @param x     Posición en 'x' del puntero.
+     * @param y     Posición en 'y' del puntero.
      */
     public Pointer(int value, int x, int y) {
         this.value = value;
@@ -39,12 +40,13 @@ public class Pointer {
         this.y = y;
 
         if (x < 0 || y < 0) {
-            throw new IllegalArgumentException("La posición %s no puede ser negativa".formatted(x<0?"x":"y"));
+            throw new IllegalArgumentException("La posición %s no puede ser negativa".formatted(x < 0 ? "x" : "y"));
         }
     }
 
     /**
      * Obtiene el valor en la posición del puntero.
+     *
      * @return Valor en la posición del puntero.
      */
     public int getValue() {
@@ -53,6 +55,7 @@ public class Pointer {
 
     /**
      * Obtiene el valor en la posición del puntero.
+     *
      * @param value Valor en la posición del puntero.
      */
     public void setValue(int value) {
@@ -61,13 +64,19 @@ public class Pointer {
 
     /**
      * Obtiene la posición 'x' del puntero.
+     *
      * @return Posición 'x' del puntero.
      */
-    public int getX(){ return x; }
+    public int getX() {
+        return x;
+    }
 
     /**
      * Obtiene la posición 'y' del puntero.
+     *
      * @return Posición 'y' del puntero.
      */
-    public int getY(){ return y; }
+    public int getY() {
+        return y;
+    }
 }
