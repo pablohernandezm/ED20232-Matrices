@@ -7,7 +7,7 @@
 ## Entorno de desarrollo
 El proyecto fue realizado utilizando en conjunto las herramientas:
 - Apache Netbeans IDE 19.0.0
-- IntelliJ IDEA 2020.3.2 (Ultimate Edition)
+- IntelliJ IDEA 2023.2.2 (Ultimate Edition)
 
 Además de la versión 21 de Java (openjdk version "21", 2023-09-19 LTS).
 
