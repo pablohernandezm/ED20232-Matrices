@@ -514,8 +514,155 @@ public class Main {
      * Método para ejecutar la operación de rotación de matrices según las
      * especificaciones del problema.
      */
-    private static void rotarMatrices() {
-        //TODO: Implementar
+     private static void rotarMatrices() {
+
+
+        // Pedir al usuario el tamaño de la matriz
+        System.out.print("Ingrese el tamaño de la matriz (n): ");
+        int n = sc.nextInt();
+
+        if (n < 2 || n > 10) {
+            System.out.println("Tamaño de matriz no válido. Debe estar entre 2 y 10.");
+            return;
+        }
+
+        // Crear y llenar la matriz con valores aleatorios del 5 al 25
+        int[][] matrix = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = (int) (Math.random() * 21 + 5); // Números aleatorios entre 5 y 25
+            }
+        }
+
+        // Mostrar la matriz original
+        System.out.println("Matriz Original:");
+        printMatrix(matrix);
+
+        // Pedir al usuario el anillo a rotar
+        System.out.print("Ingrese el número del anillo a rotar (1..." + (n / 2) + "): ");
+        int anillo = sc.nextInt();
+        if (anillo < 1 || anillo > (n / 2)) {
+            System.out.println("Número de anillo no válido.");
+            return;
+        }
+
+        // Pedir la dirección de rotación
+        System.out.print("Ingrese la dirección de rotación (izquierda o derecha): ");
+        String direccion = sc.next();
+        if (!direccion.equals("izquierda") && !direccion.equals("derecha")) {
+            System.out.println("Dirección no válida.");
+            return;
+        }
+
+        // Pedir la cantidad de grados a rotar
+        System.out.print("Ingrese la cantidad de grados a rotar (90, 180, 270): ");
+        int grados = sc.nextInt();
+        if (grados != 90 && grados != 180 && grados != 270) {
+            System.out.println("Cantidad de grados no válida.");
+            return;
+        }
+
+        // Guardar las partes superior, derecha, abajo e izquierda del anillo
+        int[] top = new int[n - 2 * anillo + 2];
+        int[] right = new int[n - 2 * anillo + 2];
+        int[] bottom = new int[n - 2 * anillo + 2];
+        int[] left = new int[n - 2 * anillo + 2];
+
+        int idx = 0;
+        for (int i = anillo - 1; i < n - anillo + 1; i++) {
+            top[idx] = matrix[anillo - 1][i];
+            right[idx] = matrix[i][n - anillo];
+            bottom[idx] = matrix[n - anillo][n - i - 1];
+            left[idx] = matrix[n - i - 1][anillo - 1];
+            idx++;
+        }
+
+        if (direccion.equalsIgnoreCase("derecha")){
+            switch (grados) {
+                case 90: // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matrix[anillo - 1][i] = left[idx];
+                        matrix[i][n - anillo] = top[idx];
+                        matrix[n - anillo][n - i - 1] = right[idx];
+                        matrix[n - i - 1][anillo - 1] = bottom[idx];
+                        idx++;
+                    }
+                    break;
+                case 180:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matrix[anillo - 1][i] = bottom[idx];
+                        matrix[i][n - anillo] = left[idx];
+                        matrix[n - anillo][n - i - 1] = top[idx];
+                        matrix[n - i - 1][anillo - 1] = right[idx];
+                        idx++;
+                    }
+                    break;
+                case 270:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matrix[anillo - 1][i] = right[idx];
+                        matrix[i][n - anillo] = bottom[idx];
+                        matrix[n - anillo][n - i - 1] = left[idx];
+                        matrix[n - i - 1][anillo - 1] = top[idx];
+                        idx++;
+                    }
+            }
+        }
+
+        if (direccion.equalsIgnoreCase("izquierda")){
+            switch (grados) {
+                case 90: // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matrix[anillo - 1][i] = right[idx];
+                        matrix[i][n - anillo] = bottom[idx];
+                        matrix[n - anillo][n - i - 1] = left[idx];
+                        matrix[n - i - 1][anillo - 1] = top[idx];
+                        idx++;
+                    }
+                    break;
+                case 180:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matrix[anillo - 1][i] = bottom[idx];
+                        matrix[i][n - anillo] = left[idx];
+                        matrix[n - anillo][n - i - 1] = top[idx];
+                        matrix[n - i - 1][anillo - 1] = right[idx];
+                        idx++;
+                    }
+                    break;
+                case 270:
+                    // Restaurar las partes en la matriz
+                    idx = 0;
+                    for (int i = anillo - 1; i < n - anillo + 1; i++) {
+                        matrix[anillo - 1][i] = left[idx];
+                        matrix[i][n - anillo] = top[idx];
+                        matrix[n - anillo][n - i - 1] = right[idx];
+                        matrix[n - i - 1][anillo - 1] = bottom[idx];
+                        idx++;
+                    }
+            }
+        }
+
+        // Mostrar la matriz resultante
+        System.out.println("Matriz Resultante:");
+        printMatrix(matrix);
+        return;
+    }
+
+    // Función para imprimir una matriz
+    static void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int value : row) {
+                System.out.print(value + "\t");
+            }
+            System.out.println();
+        }
     }
 
 }
