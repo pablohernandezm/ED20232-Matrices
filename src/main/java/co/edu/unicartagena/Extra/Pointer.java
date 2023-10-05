@@ -1,4 +1,12 @@
 package co.edu.unicartagena.Extra;
+/*
+;==========================================
+; NOMBRE:                   CÓDIGO
+; PABLO HERNÁNDEZ MELÉNDEZ  0221910052
+; JHOY CASTRO CASANOVA      0221910044
+; GABRIEL LARA MONTIEL      0222110057
+;==========================================
+*/
 
 /**
  * Clase para representar un puntero en una matriz.

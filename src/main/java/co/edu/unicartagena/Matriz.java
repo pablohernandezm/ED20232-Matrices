@@ -1,4 +1,12 @@
 package co.edu.unicartagena;
+/*
+;==========================================
+; NOMBRE:                   CÓDIGO
+; PABLO HERNÁNDEZ MELÉNDEZ  0221910052
+; JHOY CASTRO CASANOVA      0221910044
+; GABRIEL LARA MONTIEL      0222110057
+;==========================================
+*/
 
 import java.util.IllegalFormatException;
 import java.util.Objects;

@@ -36,12 +36,12 @@ Diseñe un algoritmo que cumpla con las siguientes características:
 
 ## Ordenando los elementos de una matriz
 Dada una matriz cuadrada ``n x n`` se debe evaluar una solución de acuerdo a las siguientes restricciones:
-- El usuario debe ingresar el tamaño de la matriz. ❌
-- Cada posición de la matriz debe almacenar un número generado aleatoriamente entre 25 y 75. ❌
+- El usuario debe ingresar el tamaño de la matriz. ✅
+- Cada posición de la matriz debe almacenar un número generado aleatoriamente entre 25 y 75. ✅
 - Se deben imprimir:
-    - La matriz original. ❌
-    - Los elementos por debajo de la diagonal principal, ordenados de menor a mayor. ❌ 
-    - Los elementos por encima de la diagonal principal, ordenados de mayor a menor. ❌
+    - La matriz original. ✅
+    - Los elementos por debajo de la diagonal principal, ordenados de menor a mayor. ✅ 
+    - Los elementos por encima de la diagonal principal, ordenados de mayor a menor. ✅
 
 ## Rotación de matrices
 Diseñe un algoritmo que permita la creación de una matriz ``n x n`` que cumpla con las siguientes restricciones:
